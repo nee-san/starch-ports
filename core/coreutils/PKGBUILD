@@ -1,0 +1,38 @@
+# Keeper: Strake <strake888@gmail.com>
+# Former Maintainer: Jens Staal <staal1978@gmail.com>
+# Contributor: Sascha Biermmanns <saschakb at gmail dot com>
+pkgname=coreutils-git
+pkgver=20110624
+pkgrel=2
+pkgdesc="A sane variant of the *nix core utilities"
+arch=('i686' 'x86_64')
+license=('MIT')
+url="http://strake.zanity.net:1104/coreutils"
+depends=('expr' 'dd' 'su')
+makedepends=('git' 'bmake' 'libutf') #musl-git also works
+provides=('coreutils' 'grep')
+conflicts=('coreutils' 'grep')
+
+build() {
+  cd $srcdir
+
+# Update the repo, else clone a new one
+	if [ -d sbase ]; then
+		cd sbase
+		git pull
+		cd $srcdir
+	else
+		git clone /home/strake/sbase
+	fi
+  rm -rf $srcdir/build # start fresh
+  cp -ar $srcdir/sbase $srcdir/build
+  cd $srcdir/build
+  bmake CC=musl-gcc
+}
+
+package() {
+  cd $srcdir/build/
+  bmake DESTDIR=$pkgdir PREFIX= MANPREFIX=/usr/share/man install 
+  mkdir -p $pkgdir/usr/share/licenses/$pkgname/
+  install -m644 $srcdir/build/LICENSE $pkgdir/usr/share/licenses/$pkgname/LICENSE
+}

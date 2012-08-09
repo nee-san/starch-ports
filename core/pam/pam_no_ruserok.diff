@@ -1,0 +1,30 @@
+diff -ur Linux-PAM-1.1.5_/modules/pam_rhosts/pam_rhosts.c Linux-PAM-1.1.5/modules/pam_rhosts/pam_rhosts.c
+--- Linux-PAM-1.1.5/modules/pam_rhosts/pam_rhosts.c	2012-08-05 15:09:51.252237068 -0500
++++ Linux-PAM-1.1.5/modules/pam_rhosts/pam_rhosts.c	2012-08-05 15:11:06.850072852 -0500
+@@ -111,22 +111,10 @@
+       as_root = (lpwd->pw_uid == 0);
+     }
+ 
+-#ifdef HAVE_RUSEROK_AF
+-    retval = ruserok_af (rhost, as_root, ruser, luser, PF_UNSPEC);
+-#else
+-    retval = ruserok (rhost, as_root, ruser, luser);
+-#endif
+-    if (retval != 0) {
+-      if (!opt_silent || opt_debug)
+-	pam_syslog(pamh, LOG_WARNING, "denied access to %s@%s as %s",
+-		   ruser, rhost, luser);
+-      return PAM_AUTH_ERR;
+-    } else {
+-      if (!opt_silent || opt_debug)
+-	pam_syslog(pamh, LOG_NOTICE, "allowed access to %s@%s as %s",
+-		   ruser, rhost, luser);
+-      return PAM_SUCCESS;
+-    }
++    if (!opt_silent || opt_debug)
++      pam_syslog(pamh, LOG_WARNING, "denied access to %s@%s as %s",
++                 ruser, rhost, luser);
++    return PAM_AUTH_ERR;
+ }
+ 
+ 

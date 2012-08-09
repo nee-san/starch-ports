@@ -1,0 +1,33 @@
+pkgname=bmake
+pkgver=0
+pkgrel=1
+pkgdesc="BSD Make"
+arch=('x86_64')
+url="http://openbsd.org"
+license=('BSD')
+groups=('base') 
+makedepends=('bmake' 'libbsd')
+provides=('make')
+source=($pkgname.tar.gz)
+
+build() {
+  cd $srcdir/$pkgname
+  test -z $CC && export CC=cc
+  bmake CC=$CC HOSTCC=$CC HOSTCFLAGS="$CFLAGS" CFLAGS="$CFLAGS -I." LDFLAGS="$LDFLAGS" LDADD='-lbsd'
+}
+
+package() {
+  export DESTDIR=$pkgdir
+  export BINDIR=/bin
+  export MANDIR=/usr/share/man
+  cd $srcdir/$pkgname
+  bmake install
+}
+
+sha1sums=('503fe81c7db77601cdd838956971f16ea6a24e84')
+sha1sums=('e28e8201b00127e1bc13b69b54909c7a274b9151')
+sha1sums=('9aafb7db74851dec9cdc1159f5b8bad11784c54e')
+sha1sums=('b11deb138b204333cad8fb1e3547facbcc08627a')
+sha1sums=('3eb2742ecf38db79ed76c43fa0213773620bbc17')
+sha1sums=('bb1624387127b42e87041fcc83a46e65c9258669')
+sha1sums=('e5ff162a0b1fe8f0c41d63ab94133aeaa3efe172')

@@ -1,0 +1,44 @@
+# $Id: PKGBUILD 155375 2012-04-02 16:12:53Z dan $
+# Maintainer: Dan McGee <dan@archlinux.org>
+
+pkgname=libarchive
+pkgver=3.0.4
+pkgrel=1
+pkgdesc="library that can create and read several streaming archive formats"
+arch=('i686' 'x86_64')
+url="http://libarchive.googlecode.com/"
+license=('BSD')
+depends=()
+makedepends=('zlib' 'bzip2' 'xz>=5.0.0' 'acl' 'openssl>=1.0.0' 'expat')
+source=("https://github.com/downloads/libarchive/libarchive/libarchive-${pkgver}.tar.gz"
+	sanity.diff)
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  patch -p 1 < ../sanity.diff
+  ./configure --prefix=/usr --without-xml2 --without-expat --without-iconv --enable-static --disable-shared
+  make
+}
+
+check() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  # make check
+  true
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  make DESTDIR="$pkgdir" install
+
+  install -D -m644 COPYING "$pkgdir"/usr/share/licenses/libarchive/COPYING
+
+  install -dm 755 $pkgdir/bin
+  ln $pkgdir/usr/bin/bsdtar  $pkgdir/bin/tar
+  ln $pkgdir/usr/bin/bsdcpio $pkgdir/bin/cpio
+}
+
+md5sums=('af443ca9a10ddbcbf00f7ae34ca7fc16'
+         'cd473e13378932fef53ad0df10118013')
+sha256sums=('76e8d7c7b100ec4071e48c1b7d3f3ea1d22b39db3e45b7189f75b5ff4df90fac'
+            '2f7f90e1cf050a4a35d168c117862801a49566040afb8503a5cc178a6eeefc12')

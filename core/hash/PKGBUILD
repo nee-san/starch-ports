@@ -1,0 +1,30 @@
+pkgname=hash
+pkgver=0
+pkgrel=1
+pkgdesc="Crypto-Hasher"
+arch=('x86_64')
+license=('Nil')
+groups=('base')
+makedepends=('openssl')
+source=(http://strake.zanity.net:1104/hash/hash.c)
+
+build() {
+  cd $srcdir
+  test -z $CC && export CC=cc
+  $CC $CFLAGS -c -o hash.o hash.c
+  $CC $LDFLAGS -o hash hash.o -lcrypto -lz $LDADD
+}
+
+package() {
+  cd $srcdir
+  install -dm 755 $pkgdir/bin
+  install -m 555 hash $pkgdir/bin/
+  for x in md_null md2 md4 md5 sha224 sha256 sha384 sha512 hmac ripemd; do
+    ln $pkgdir/bin/hash $pkgdir/bin/hash.$x
+  done
+}
+
+sha1sums=('5e25ff4b5dfb57584f0e399250a999a9f45f2cae')
+sha1sums=('b7c4541f584344f33d7e630630b56d75fde388dc')
+sha1sums=('b7c4541f584344f33d7e630630b56d75fde388dc')
+sha1sums=('39d8ea3a5b911031f438da378c3a8b120c0d7330')

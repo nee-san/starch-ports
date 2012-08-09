@@ -1,0 +1,30 @@
+pkgname=diffutils
+pkgver=0
+pkgrel=1
+pkgdesc="Diff Utilities"
+arch=('x86_64')
+url="http://openbsd.org"
+license=('BSD')
+groups=('base') 
+makedepends=('bmake' 'libbsd')
+source=($pkgname.tar.gz)
+
+build() {
+  for x in diff diff3 sdiff; do (
+    cd $srcdir/$x
+    test -z $CC && export CC=cc
+    bmake CC=$CC CFLAGS="$CFLAGS -D'SIZE_MAX=((size_t)(-1))' -D__dead=" LDFLAGS="$LDFLAGS" LDADD='-lbsd'
+  ); done
+}
+
+package() {
+  export DESTDIR=$pkgdir
+  export BINDIR=/bin
+  export MANDIR=/usr/share/man
+  for x in diff diff3 sdiff; do (
+    cd $srcdir/$x
+    bmake install
+  ); done
+}
+
+sha1sums=('b24a98510dec5d93e18113d5477310418e5d3f3b')

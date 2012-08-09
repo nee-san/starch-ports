@@ -1,0 +1,28 @@
+pkgname=m4
+pkgver=0
+pkgrel=1
+pkgdesc="Macronizer"
+arch=('x86_64')
+url="http://openbsd.org"
+license=('BSD')
+groups=() 
+makedepends=('bmake' 'libbsd')
+source=($pkgname.tar.gz)
+
+build() {
+  cd $srcdir/$pkgname
+  test -z $CC && export CC=cc
+  bmake CC=$CC CFLAGS="$CFLAGS -D'SIZE_MAX=((size_t)(-1))' -D__dead=" LDFLAGS="$LDFLAGS" LDADD='-lbsd'
+}
+
+package() {
+  export DESTDIR=$pkgdir
+  export BINDIR=/bin
+  export MANDIR=/usr/share/man
+  cd $srcdir/$pkgname
+  bmake install
+}
+
+sha1sums=('5f7bd5c9adc7c98a658a04008dd03ec3ea4c8931')
+sha1sums=('da711edfd365896b4999f0f878ea54351273c668')
+sha1sums=('b82fbf23405eb12eb2eb11dd048bc3550756fafe')

@@ -1,0 +1,19 @@
+pkgname=situ
+pkgver=0
+pkgrel=1
+pkgdesc="Alter files in situ"
+arch=('x86_64')
+url="http://strake.zanity.net:1104/situ/"
+license=('Other')
+groups=()
+depends=('rc' 'dc')
+source=(http://strake.zanity.net:1104/situ/situ{,.1})
+
+package() {
+  install -dm 755 $pkgdir/bin
+  install -dm 755 $pkgdir/usr/share/man/man1
+  install -m 755 $srcdir/situ $pkgdir/bin/
+  install -m 644 $srcdir/situ.1 $pkgdir/usr/share/man/man1/
+}
+sha1sums=('010cb344201e97ecaecdd33fa163913b3c562ca5'
+          'debd5ffb1948c9a5dca92aea9b4d93668ee33886')

@@ -1,0 +1,31 @@
+pkgname=nawk
+pkgver=20110810
+pkgrel=3
+pkgdesc="The one, true implementation of AWK"
+url="http://cm.bell-labs.com/who/bwk/"
+license=('MIT')
+arch=('i686' 'x86_64')
+options=('!makeflags')
+depends=()
+makedepends=('uClibc')
+provides=('awk')
+source=("http://www.cs.princeton.edu/~bwk/btl.mirror/awk.tar.gz"
+        'manpage-naming.patch')
+
+build() {
+  patch -Np1 < manpage-naming.patch
+  sed -n '/Copyright/,/THIS SOFTWARE\./p' README > LICENSE
+
+  make "CPPFLAGS=-DHAS_ISBLANK" "LDFLAGS=$LDFLAGS" "CFLAGS=$CFLAGS"
+}
+
+package() {
+  install -Dm755 a.out "$pkgdir/usr/bin/awk"
+  install -Dm644 awk.1 "$pkgdir/usr/share/man/man1/awk.1"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/awk/LICENSE"
+}
+
+md5sums=('a7062ecade93dc4cb39190e48db9a51d'
+         'da5fb872e791e3be685fe45ed3c44fcd')
+md5sums=('a7062ecade93dc4cb39190e48db9a51d'
+         'a52a678e7db075b85d3f0a54012baf61')

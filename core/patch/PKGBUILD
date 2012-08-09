@@ -1,0 +1,26 @@
+pkgname=patch
+pkgver=0
+pkgrel=1
+pkgdesc="Patch Tool"
+arch=('x86_64')
+url="http://openbsd.org"
+license=('BSD')
+groups=('base') 
+makedepends=('bmake' 'libbsd')
+source=($pkgname.tar.gz)
+
+build() {
+  cd $srcdir/$pkgname
+  test -z $CC && export CC=cc
+  bmake CC=$CC CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" LDADD='-lbsd'
+}
+
+package() {
+  export DESTDIR=$pkgdir
+  export BINDIR=/bin
+  export MANDIR=/usr/share/man
+  cd $srcdir/$pkgname
+  bmake install
+}
+
+sha1sums=('fab9911db7c5a23e3773ca509796d21b6a8d20c7')

@@ -1,0 +1,25 @@
+pkgname=gbinutils
+_pkgname=binutils
+pkgver=2.18
+pkgsubver=a
+pkgrel=1
+pkgdesc="BSD Binary Utilities"
+arch=('x86_64')
+url="http://www.gnu.org/software/binutils/"
+license=('GPL')
+source=(http://ftp.gnu.org/gnu/$_pkgname/$_pkgname-$pkgver$pkgsubver.tar.bz2)
+
+build() {
+  cd "$srcdir/$_pkgname-$pkgver"
+  ./configure --prefix=/usr --target=x86_64-unknown-linux-uclibc
+  make
+}
+
+package() {
+  cd "$srcdir/$_pkgname-$pkgver"
+  make DESTDIR="$pkgdir/" install
+}
+
+sha1sums=('ccee4124a19508e68f5447bf3e0c43203f0c060e')
+sha1sums=('1c7952e78d0c4a959274f155202f248d49aab528')
+sha1sums=('0697d6f99ec0745567a5acfa7e4e31bcc9ef8698')

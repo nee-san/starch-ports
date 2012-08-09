@@ -1,0 +1,22 @@
+pkgname=pcc
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Portable C Compiler"
+arch=('x86_64')
+url="http://pcc.ludd.ltu.se"
+license=('BSD')
+depends=('pcc-libs')
+source=(http://pcc.ludd.ltu.se/ftp/pub/pcc-releases/$pkgname-$pkgver.tgz)
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  make DESTDIR="$pkgdir/" install
+}
+
+sha1sums=('a994d6bf75ae81add70d35478b59fca7c63bd5df')

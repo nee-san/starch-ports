@@ -1,0 +1,63 @@
+# $Id: PKGBUILD 153601 2012-03-16 15:10:42Z ronald $
+# Maintainer: Ronald van Haren <ronald.archlinux.org> 
+# Contributor: judd <jvinet@zeroflux.org>
+
+pkgname=e2fsprogs
+pkgver=1.42.1
+pkgrel=1
+pkgdesc="Ext2/3/4 filesystem utilities"
+arch=('i686' 'x86_64')
+license=('GPL' 'LGPL' 'MIT')
+url="http://e2fsprogs.sourceforge.net"
+groups=('base')
+depends=('sh')
+makedepends=('util-linux' 'bc')
+source=("http://downloads.sourceforge.net/sourceforge/${pkgname}/${pkgname}-${pkgver}.tar.gz"
+        'fallocate.diff'
+        'fallocate.c'
+        'MIT-LICENSE')
+backup=('etc/mke2fs.conf')
+install=${pkgname}.install
+sha1sums=('c25c73de98737b5f6fb9debec36bfb6416b0ac07'
+          'f4a0d5b0cdb980e3fedd6f5e7dde0b0ffb7bbdfb')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  # Remove unnecessary init.d directory
+  echo misc/Makefile.in | situ "sed '/init\.d/s|^|#|'"
+
+  patch -p 1 < ../fallocate.diff
+  cp ../fallocate.c lib/ext2fs/
+
+  ./configure --prefix=/usr --with-root-prefix="" \
+      --disable-fsck --disable-uuidd \
+
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install install-libs
+
+  echo "${pkgdir}/usr/bin/compile_et" | situ "sed 's/^AWK=.*/AWK=awk/'"
+  
+  # remove references to build directory
+  echo "${pkgdir}/usr/bin/mk_cmds"    | situ sed\ \''s#^SS_DIR=.*#SS_DIR="/usr/share/ss"#'\'
+  echo "${pkgdir}/usr/bin/compile_et" | situ sed\ \''s#^ET_DIR=.*#ET_DIR="/usr/share/et"#'\'
+
+  # install MIT license
+  install -Dm644 "${srcdir}/MIT-LICENSE" \
+    "${pkgdir}/usr/share/licenses/${pkgname}/MIT-LICENSE"
+}
+sha1sums=('c25c73de98737b5f6fb9debec36bfb6416b0ac07'
+          '54708c0ce272aaa88892d5959b0cde76d7a3153b'
+          'f4a0d5b0cdb980e3fedd6f5e7dde0b0ffb7bbdfb')
+sha1sums=('c25c73de98737b5f6fb9debec36bfb6416b0ac07'
+          '54708c0ce272aaa88892d5959b0cde76d7a3153b'
+          '9e17a59b2bdd6442d5f6a02f6411bf27805cc94b'
+          'f4a0d5b0cdb980e3fedd6f5e7dde0b0ffb7bbdfb')
+sha1sums=('c25c73de98737b5f6fb9debec36bfb6416b0ac07'
+          '54708c0ce272aaa88892d5959b0cde76d7a3153b'
+          '558ef0ad5ca6f1d5e1b057aeeed6ce30832d59bc'
+          'f4a0d5b0cdb980e3fedd6f5e7dde0b0ffb7bbdfb')

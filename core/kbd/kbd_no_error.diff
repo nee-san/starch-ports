@@ -1,0 +1,143 @@
+diff -ur kbd-1.15.3/src/kbdinfo.c kbd-1.15.3/src/kbdinfo.c
+--- kbd-1.15.3/src/kbdinfo.c	2011-04-26 15:29:35.000000000 -0500
++++ kbd-1.15.3/src/kbdinfo.c	2012-08-06 09:38:57.382839343 -0500
+@@ -1,6 +1,5 @@
+ #include <stdio.h>
+ #include <errno.h>
+-#include <error.h>
+ #include <unistd.h>
+ #include <sys/ioctl.h>
+ #include <linux/kd.h>
+@@ -75,7 +74,7 @@
+ 
+ 	if (!strcasecmp("GETMODE", action)) {
+ 		if (ioctl(fd, KDGETMODE, &mode) == -1)
+-			error(EXIT_FAILURE, errno, "ioctl");
++			{ perror("kbdinfo"); exit (1); }
+ 
+ 		switch (mode) {
+ 			case KD_TEXT:		rc = answer("text");		break;
+@@ -84,7 +83,7 @@
+ 
+ 	} else if (!strcasecmp("GKBMODE", action)) {
+ 		if (ioctl(fd, KDGKBMODE, &mode) == -1)
+-			error(EXIT_FAILURE, errno, "ioctl");
++			{ perror("kbdinfo"); exit (1); }
+ 
+ 		switch (mode) {
+ 			case K_RAW:		rc = answer("raw");		break;
+@@ -95,7 +94,7 @@
+ 
+ 	} else if (!strcasecmp("GKBMETA", action)) {
+ 		if (ioctl(fd, KDGKBMETA, &mode) == -1)
+-			error(EXIT_FAILURE, errno, "ioctl");
++			{ perror("kbdinfo"); exit (1); }
+ 
+ 		switch (mode) {
+ 			case K_METABIT:		rc = answer("metabit");		break;
+@@ -104,7 +103,7 @@
+ 
+ 	} else if (!strcasecmp("GKBLED", action)) {
+ 		if (ioctl(fd, KDGKBLED, &flags) == -1)
+-			error(EXIT_FAILURE, errno, "ioctl");
++			{ perror("kbdinfo"); exit (1); }
+ 
+ 		mode = (flags & 0x7);
+ 
+diff -ur kbd-1.15.3/src/setvtrgb.c kbd-1.15.3/src/setvtrgb.c
+--- kbd-1.15.3/src/setvtrgb.c	2011-04-26 15:29:35.000000000 -0500
++++ kbd-1.15.3/src/setvtrgb.c	2012-08-06 09:39:02.499585286 -0500
+@@ -5,7 +5,6 @@
+ #include <sys/ioctl.h>
+ #include <linux/kd.h>
+ #include <errno.h>
+-#include <error.h>
+ #include "kbd.h"
+ #include "getfd.h"
+ #include "nls.h"
+@@ -59,8 +58,10 @@
+ 	int fd = getfd(NULL);
+ 
+ 	/* Apply the color map to the tty via ioctl */
+-	if (ioctl(fd, PIO_CMAP, colormap) == -1)
+-		error(EXIT_FAILURE, errno, "ioctl");
++	if (ioctl(fd, PIO_CMAP, colormap) == -1) {
++		perror ("setvtrgb");
++		exit (1);
++	}
+ 
+ 	close(fd);
+ }
+@@ -71,36 +72,43 @@
+ 	int c;
+ 	unsigned int rows, cols, val;
+ 
+-	if ((cmap = calloc(3 * 16, sizeof(unsigned char))) == NULL)
+-		error(EXIT_FAILURE, errno, "calloc");
++	if ((cmap = calloc(3 * 16, sizeof(unsigned char))) == NULL) {
++		perror ("setvtrgb");
++		exit (1);
++	}
+ 
+ 	for (rows = 0; rows < 3; rows++) {
+ 		cols = 0;
+ 
+ 		while (cols < 16) {
+ 			if ((c = fscanf(fd, "%u", &val)) != 1) {
+-				if (c == EOF)
+-					error(EXIT_FAILURE, errno, "fscanf");
++				if (c == EOF) {
++					perror ("setvtrgb");
++					exit (1);
++				}
+ 
+-				error(EXIT_FAILURE, 0, _("Error: %s: Invalid value in field %u in line %u."),
+-				      filename, rows + 1, cols + 1);
++				fprintf (stderr, "setvtrgb: %s: Invalid value in field %u of line %u\n", filename, rows + 1, cols + 1);
++				exit (1);
+ 			}
+ 
+ 			cmap[rows + cols * 3] = (unsigned char) val;
+ 
+-			if (cols < 15 && fgetc(fd) != ',')
+-				error(EXIT_FAILURE, 0, _("Error: %s: Insufficient number of fields in line %u."),
+-				      filename, rows + 1);
++			if (cols < 15 && fgetc(fd) != ',') {
++				fprintf (stderr, "setvtrgb: %s: too few fields in line %u\n", filename, rows + 1);
++				exit (1);
++			}
+ 			cols++;
+ 		}
+ 
+-		if ((c = fgetc(fd)) == EOF)
+-			error(EXIT_FAILURE, 0, _("Error: %s: Line %u has ended unexpectedly.\n"),
+-			      filename, rows + 1); 
+-
+-		if (c != '\n')
+-			error(EXIT_FAILURE, 0, _("Error: %s: Line %u is too long.\n"),
+-			      filename, rows + 1);
++		if ((c = fgetc(fd)) == EOF) {
++			fprintf (stderr, "setvtrgb: %s: line %u too short\n", filename, rows + 1);
++			exit (1);
++		}
++
++		if (c != '\n') {
++			fprintf (stderr, "setvtrgb: %s: line %u too long\n", filename, rows + 1);
++			exit (1);
++		}
+ 	}
+ }
+ 
+@@ -140,8 +148,10 @@
+ 		parse_file(stdin, "stdin");
+ 
+ 	} else {
+-		if ((fd = fopen(file, "r")) == NULL)
+-			error(EXIT_FAILURE, errno, "fopen");
++		if ((fd = fopen(file, "r")) == NULL) {
++			perror ("setvtrgb");
++			exit (1);
++		}
+ 
+ 		parse_file(fd, file);
+ 		fclose(fd);

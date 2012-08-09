@@ -1,0 +1,56 @@
+# $Id: PKGBUILD 161792 2012-06-14 10:14:53Z tpowa $
+# Maintainer: Tobias Powalowski <tpowa@archlinux.org>
+# Contributor: judd <jvinet@zeroflux.org>
+
+pkgname=pam
+pkgver=1.1.5
+pkgrel=4
+pkgdesc="PAM (Pluggable Authentication Modules) library"
+arch=('i686' 'x86_64')
+license=('GPL2')
+url="http://www.kernel.org/pub/linux/libs/pam/"
+depends=('pambase')
+makedepends=('flex')
+backup=(etc/security/{access.conf,group.conf,limits.conf,namespace.conf,namespace.init,pam_env.conf,time.conf} etc/default/passwd etc/environment)
+source=(https://fedorahosted.org/releases/l/i/linux-pam/Linux-PAM-$pkgver.tar.bz2
+        #http://www.kernel.org/pub/linux/libs/pam/library/Linux-PAM-$pkgver.tar.bz2
+        pam_no_innetgr.diff
+        pam_no_ruserok.diff
+        pam_no_yywrap.sed)
+options=('!libtool' '!emptydirs')
+
+build() {
+  cd $srcdir/Linux-PAM-$pkgver
+  patch -p 1 < ../pam_no_innetgr.diff
+  patch -p 1 < ../pam_no_ruserok.diff
+  du -a | cut -f 2 | grep '\.[hc]$' | situ "sed '/^#include <dlfcn.h>$/d'" >/dev/null
+  du -a | cut -f 2 | grep '\.l$' | situ "sed -f ../pam_no_yywrap.sed" >/dev/null
+  echo libpam/pam_static_modules.h | situ "sed -E '/_pam_(cracklib|rhosts_auth|tally2|userdb|pwhistory)_modstruct/d'"
+  ./configure --libdir=/usr/lib --enable-static --disable-shared --enable-static-modules --disable-cracklib --disable-nis
+  echo Makefile | situ "sed 's/examples//g'"
+  echo modules/pam_unix/Makefile | situ "sed 's/-l *$/-lcrypt/'"
+  make
+}
+
+package() {
+  cd $srcdir/Linux-PAM-$pkgver
+  make DESTDIR=$pkgdir install
+
+  # add the realtime permissions for audio users
+  echo $pkgdir/etc/security/limits.conf | situ "sed 's|# End of file||'"
+  cat >>$pkgdir/etc/security/limits.conf <<_EOT
+*               -       rtprio          0
+*               -       nice            0
+@audio          -       rtprio          65
+@audio          -       nice           -10
+@audio          -       memlock         40000
+_EOT
+
+  # set unix_chkpwd uid
+  chmod +s $pkgdir/sbin/unix_chkpwd
+}
+
+sha1sums=('662a769f66708c3b9b5a41d62802ed69bf489e09'
+          '203d75fad2d41ae66da13af8dd57a7981754a4b3'
+          'b84d15b3e619a86601ec83419cb899c733a404aa'
+          'aec4f9d765fe57ed9e281f54dd4118ce2802a2fa')

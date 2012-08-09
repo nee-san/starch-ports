@@ -1,0 +1,28 @@
+pkgname=lex
+pkgver=0
+pkgrel=1
+pkgdesc="Lexical Scanner Generator"
+arch=('x86_64')
+url="http://openbsd.org"
+license=('BSD')
+groups=('base') 
+makedepends=('bmake' 'libbsd')
+source=($pkgname.tar.gz)
+
+build() {
+  cd $srcdir/$pkgname
+  test -z $CC && export CC=cc
+  bmake CC=$CC CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" LDADD='-lbsd'
+}
+
+package() {
+  export DESTDIR=$pkgdir
+  export BINDIR=/bin
+  export MANDIR=/usr/share/man
+  cd $srcdir/$pkgname
+  bmake install
+}
+
+sha1sums=('121406d46f55f6d246968791331917c6f4695d06')
+sha1sums=('d039aa4ccdece59354aa38273272b570ba0b9986')
+sha1sums=('a3f6331ec3d87f6394a4b7bc50dc7c3fdefdeb05')

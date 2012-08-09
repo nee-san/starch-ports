@@ -1,0 +1,33 @@
+# $Id: PKGBUILD 162758 2012-06-29 16:50:44Z tpowa $
+# Maintainer: Tobias Powalowski <tpowa@archlinux.org>
+pkgname=libusbx
+pkgver=1.0.12
+pkgrel=2
+makedepends=('uClibc')
+pkgdesc="Library that provides generic access to USB device"
+arch=(i686 x86_64)
+url="http://libusbx.org"
+license=('LGPL')
+source=(http://downloads.sourceforge.net/${pkgname}/${pkgname}-${pkgver}.tar.bz2)
+options=(!libtool)
+replaces=('libusb1' 'libusb')
+provides=("libusb=$pkgver")
+conflicts=("libusb")
+md5sums=('c41352ac755c7992edfcbb2ea4ad1349')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ./configure --prefix=/usr --disable-shared
+  make
+}
+
+check() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  # make check
+  true
+}
+
+package () {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+}

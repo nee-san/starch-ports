@@ -1,0 +1,28 @@
+pkgname=dd
+pkgver=0
+pkgrel=1
+pkgdesc="Block Copier"
+arch=('x86_64')
+url="http://openbsd.org"
+license=('BSD')
+groups=('base') 
+makedepends=('bmake' 'libbsd')
+source=($pkgname.tar.gz)
+
+build() {
+  cd $srcdir/$pkgname
+  test -z $CC && export CC=cc
+  bmake CC=$CC CFLAGS="$CFLAGS -D'QUAD_MAX=((quad_t)(-1))' -D'SIZE_T_MAX=((size_t)(-1))'" LDFLAGS="$LDFLAGS" LDADD='-lbsd'
+}
+
+package() {
+  export DESTDIR=$pkgdir
+  export BINDIR=/bin
+  export MANDIR=/usr/share/man
+  cd $srcdir/$pkgname
+  bmake install
+}
+
+sha1sums=('7ce92f3ab8298a408bc5fe7f3c8a1f39352668e0')
+sha1sums=('747c7fce76e0fbb25628439abe42bf1db25ce490')
+sha1sums=('ba75d4100a09384d1f986b8e8b520ef091f46eeb')

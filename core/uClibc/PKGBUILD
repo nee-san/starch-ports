@@ -1,0 +1,28 @@
+# Maintainer: Bartlomiej Piotrowski <nospam@bpiotrowski.pl>
+# Contributor: res <andres87p@gmail.com>
+
+pkgname=uClibc
+pkgver=0.9.33.1
+pkgrel=1
+pkgdesc='C library for developing embedded Linux systems'
+arch=('i686' 'x86_64')
+license=('LGPL')
+url="http://www.uclibc.org/"
+source=(http://www.uclibc.org/downloads/${pkgname}-${pkgver}.tar.xz .config)
+
+build() {
+    cd "$srcdir"/$pkgname-$pkgver
+
+    #msg "Running make menuconfig"
+    #make menuconfig
+    cp $srcdir/.config ./
+    make
+}
+
+package() {
+    cd "$srcdir"/$pkgname-$pkgver
+    make PREFIX="$pkgdir/" install
+}
+
+md5sums=('3f9d8eb9505d059e2c27ca0abcd1e86e'
+         '3b3c8594d3eb62d11d1603322cb5de94')

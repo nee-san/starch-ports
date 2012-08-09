@@ -1,0 +1,10 @@
+--- a/lib/ext2fs/Makefile.in	2012-08-05 10:23:27.533162157 -0500
++++ b/lib/ext2fs/Makefile.in	2012-08-05 10:23:37.936656445 -0500
+@@ -44,6 +44,7 @@
+ 	expanddir.o \
+ 	ext_attr.o \
+ 	extent.o \
++	fallocate.o \
+ 	fileio.o \
+ 	finddev.o \
+ 	flushb.o \
