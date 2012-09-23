@@ -1,0 +1,36 @@
+pkgname=shloginutils
+pkgver=0
+pkgrel=1
+pkgdesc="Shadow Login Utilities"
+arch=('x86_64')
+license=()
+groups=()
+depends=('shadow')
+makedepends=()
+checkdepends=()
+optdepends=()
+provides=('loginutils')
+conflicts=('loginutils')
+source=(http://strake.zanity.net:1104/shloginutils/{auth.h,auth.shadow.c,go.{c,h},login.c,makefile,su.c,util.{c,h}})
+
+build() {
+  cd $srcdir
+  make
+}
+
+package() {
+  cd $srcdir
+  mkdir -pm 755 $pkgdir/bin
+  cp login su $pkgdir/bin/
+  chmod 755 $pkgdir/bin/*
+}
+
+sha1sums=('1e078e8fb62b0e9a170a8da4264893f8956c2806'
+          'a6204b8c39de063238c2a0dd16dc53d0027c98b9'
+          '06e2f995654174fc1b4d573fc6d260ae80996b20'
+          'e9acc020b7307fd4119fa4373905cb6450131b2b'
+          '1ce901b9d03dd217949d2375b85cc652c4fd9337'
+          '418743e0aea465f2dfb76bf5c10edbfd7563f2e3'
+          '644faefe7c224e7d349f7a5a6a1bbb94779ed257'
+          '37d83b3ea0920841241ca219c639b141074a3a5c'
+          'f2fc4794eca6e2dd3d13d7ea2facd17fe57fe748')
