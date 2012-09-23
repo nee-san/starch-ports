@@ -29,22 +29,10 @@ source=("http://pkg-shadow.alioth.debian.org/releases/$pkgname-$pkgver.tar.bz2"{
         passwd
         shadow.cron.daily
         useradd.defaults
+        no_rlogin.diff
+        method.diff
         xstrdup.patch
         shadow-strncpy-usage.patch)
-sha1sums=('81f38720b953ef9c2c100c43d02dfe19cafd6c30'
-          '126570e2939bf3b57f28df5197ab9309747a6b5c'
-          '33a6cf1e44a1410e5c9726c89e5de68b78f5f922'
-          '78ec184a499f9708adcfcf0b7a3b22a60bf39f91'
-          '4ad0e059406a305c8640ed30d93c2a1f62c2f4ad'
-          '12427b1ca92a9b85ca8202239f0d9f50198b818f'
-          '0e56fed7fc93572c6bf0d8f3b099166558bb46f1'
-          'e5cab2118ecb1e61874cde842d7d04d1003f35cb'
-          '12427b1ca92a9b85ca8202239f0d9f50198b818f'
-          '611be25d91c3f8f307c7fe2485d5f781e5dee75f'
-          '5d83ba7e11c765c951867cbe00b0ae7ff57148fa'
-          '9ae93de5987dd0ae428f0cc1a5a5a5cd53583f19'
-          '6010fffeed1fc6673ad9875492e1193b1a847b53'
-          '21e12966a6befb25ec123b403cd9b5c492fe5b16')
 
 build() {
   cd "$pkgname-$pkgver"
@@ -62,6 +50,10 @@ build() {
   # supress etc/pam.d/*, we provide our own
   #sed -i '/^SUBDIRS/s/pam.d//' etc/Makefile.in
 
+  patch -Np 1 < ../method.diff
+  patch -Np 1 < ../no_rlogin.diff
+  rm libmisc/rlogin.c
+
   ./configure \
     --prefix=/usr \
     --libdir=/lib \
@@ -69,6 +61,7 @@ build() {
     --sysconfdir=/etc \
     --without-selinux \
     --with-nscd=no \
+    --with-libpam=no \
 
   make
 }
@@ -126,3 +119,20 @@ package() {
           -name 'newgrp.1' ')' \
       -delete
 }
+
+sha1sums=('81f38720b953ef9c2c100c43d02dfe19cafd6c30'
+          '126570e2939bf3b57f28df5197ab9309747a6b5c'
+          '33a6cf1e44a1410e5c9726c89e5de68b78f5f922'
+          '78ec184a499f9708adcfcf0b7a3b22a60bf39f91'
+          '4ad0e059406a305c8640ed30d93c2a1f62c2f4ad'
+          '12427b1ca92a9b85ca8202239f0d9f50198b818f'
+          '0e56fed7fc93572c6bf0d8f3b099166558bb46f1'
+          'e5cab2118ecb1e61874cde842d7d04d1003f35cb'
+          '12427b1ca92a9b85ca8202239f0d9f50198b818f'
+          '611be25d91c3f8f307c7fe2485d5f781e5dee75f'
+          '5d83ba7e11c765c951867cbe00b0ae7ff57148fa'
+          '9ae93de5987dd0ae428f0cc1a5a5a5cd53583f19'
+          '1c14fdfd36ef40bac303257573a33ba44a385fa7'
+          'da0107d3c0d395e97caee772d186f8ce794ea814'
+          '6010fffeed1fc6673ad9875492e1193b1a847b53'
+          '21e12966a6befb25ec123b403cd9b5c492fe5b16')
