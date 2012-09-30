@@ -1,0 +1,25 @@
+#!/bin/ksh
+#
+# This work is free.
+# I, Strake <strake888@gmail.com>, the authour,
+# 	waive all copyright to this work, but
+# 	waive NO moral rights to this work.
+# 
+# This work cometh AS IS, WITH ALL FAULTS, WITH NO WARRANTY OF ANY KIND WHATSOEVER, not even the implied warranties of MERCHANTABILITY, FITNESS, and TITLE.
+# In NO CASE SHALL THE AUTHOUR BE LIABLE for ANY DAMAGES OR HARMS CAUSED BY OR LINKED TO THIS WORK.
+
+case $1 in
+	(-c)	file=$2
+		shift 2
+		exec $0 $* < $file
+	;;
+esac
+
+n=0
+
+while true; do
+	read hash file || break
+	diff -u <(cat $file | hash.$(echo $0 | sed 's%^[^/]*/%%' | sed 's/sum$//')) <(echo $hash) > /dev/null || n=$(dc -e "$n 1 + p")
+done
+
+exit $n

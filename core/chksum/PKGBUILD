@@ -1,0 +1,20 @@
+pkgname=chksum
+pkgver=0
+pkgrel=1
+pkgdesc="*sum utilities"
+arch=('x86_64')
+license=('Nil')
+groups=()
+depends=('hash')
+source=(chksum)
+
+build() {
+  true
+}
+
+package() {
+  mkdir -p $pkgdir/bin
+  cp $srcdir/chksum $pkgdir/bin
+  chmod a+x $pkgdir/bin/chksum
+}
+sha1sums=('35e6b7d847235deb96168071924664a78d0d187a')
