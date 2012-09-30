@@ -19,7 +19,7 @@ package() {
   cd $srcdir
   install -dm 755 $pkgdir/bin
   install -m 555 hash $pkgdir/bin/
-  for x in md_null md2 md4 md5 sha224 sha256 sha384 sha512 hmac ripemd; do
+  for x in md_null md2 md4 md5 sha1 sha224 sha256 sha384 sha512 hmac ripemd; do
     ln $pkgdir/bin/hash $pkgdir/bin/hash.$x
   done
 }
