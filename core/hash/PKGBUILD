@@ -24,7 +24,5 @@ package() {
   done
 }
 
-sha1sums=('5e25ff4b5dfb57584f0e399250a999a9f45f2cae')
-sha1sums=('b7c4541f584344f33d7e630630b56d75fde388dc')
-sha1sums=('b7c4541f584344f33d7e630630b56d75fde388dc')
 sha1sums=('39d8ea3a5b911031f438da378c3a8b120c0d7330')
+sha1sums=('cc248a90ec91558d2deca45f9cbc9d39cd41fc64')
