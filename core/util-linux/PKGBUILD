@@ -14,7 +14,7 @@ conflicts=('util-linux-ng')
 provides=("util-linux-ng=${pkgver}")
 license=('GPL2')
 options=('!libtool')
-source=(ftp://ftp.kernel.org/pub/linux/utils/${pkgname}/v2.21/${pkgname}-${pkgver}.tar.xz)
+source=(ftp://ftp.kernel.org/pub/linux/utils/${pkgname}/v2.21/${pkgname}-${pkgver}.tar.xz mountpoint)
 backup=(etc/pam.d/chfn etc/pam.d/chsh etc/pam.d/login)
 install=util-linux.install
 
@@ -52,6 +52,9 @@ package() {
 
   # delete stray empty dir, fixed upstream
   rm -r usr/share/man/ru
+
+  test -e bin/mountpoint || cp $srcdir/mountpoint bin/ && chmod +x bin/mountpoint
 }
 
-sha1sums=('f1ebeb8fe32f11f79bbc5d26e89cc801d1663d2f')
+sha1sums=('f1ebeb8fe32f11f79bbc5d26e89cc801d1663d2f'
+          'ecb02455b70e0d3ff853dfe28f3438bfcd6aa8f6')
