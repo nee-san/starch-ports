@@ -24,5 +24,5 @@ package() {
     make PREFIX="$pkgdir/" install
 }
 
-md5sums=('3f9d8eb9505d059e2c27ca0abcd1e86e'
-         '3b3c8594d3eb62d11d1603322cb5de94')
+sha1sums=('036a9f11554628b74f35c86b3677326f1bb24412'
+          'c85e17f7efa3257ebc609533c87f749874afded8')
