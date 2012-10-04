@@ -1,0 +1,37 @@
+# $Id: PKGBUILD 68994 2012-04-07 09:57:09Z ttopper $
+# Maintainer: Thorsten Töpper <atsutane-tu@freethoughts.de>
+# Contributor: Daniel Hommel <dhommel@gmail.com>
+
+pkgname=mksh
+pkgver=R40f
+pkgrel=1
+pkgdesc="The MirBSD Korn Shell - an enhanced version of the public domain ksh"
+url="http://mirbsd.de/mksh"
+license=("custom")
+makedepends=('cpio')
+arch=('i686' 'x86_64')
+install=mksh.install
+source=("https://www.mirbsd.org/MirOS/dist/mir/mksh/$pkgname-$pkgver.cpio.gz"
+        "https://www.mirbsd.org/TaC-mksh.txt")
+depends=()
+md5sums=('22c9570660c2efadf36de7b620d06966'
+         '0016ef61a990bcd763604da7ae2beb25')
+
+build() {
+  cd "$srcdir"
+  # makepkg can't extract cpio files
+  cpio -mid < "$pkgname-$pkgver.cpio"
+
+  cd "$srcdir/$pkgname"
+  sh Build.sh -r -c lto
+  ./test.sh
+  gzip -n9 mksh.1
+}
+
+package() {
+  cd "$srcdir/$pkgname"
+  install -D -m 755 mksh "$pkgdir/bin/mksh"
+  install -D -m 644 mksh.1.gz "$pkgdir/usr/share/man/man1/mksh.1.gz"
+  install -D -m 644 dot.mkshrc "$pkgdir/etc/skel/.mkshrc"
+  install -D -m 644 "$srcdir/TaC-mksh.txt" "$pkgdir/usr/share/licenses/mksh/TaC-mksh.txt"
+}
