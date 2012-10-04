@@ -9,6 +9,7 @@ options=('!makeflags')
 depends=()
 makedepends=('uClibc')
 provides=('awk')
+conflicts=('awk')
 source=("http://www.cs.princeton.edu/~bwk/btl.mirror/awk.tar.gz"
         'manpage-naming.patch')
 
