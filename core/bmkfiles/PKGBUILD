@@ -1,0 +1,21 @@
+pkgname=bmkfiles
+pkgver=0
+pkgrel=1
+pkgdesc="BSD Make"
+arch=('x86_64')
+url="http://openbsd.org"
+license=('BSD')
+groups=('base') 
+makedepends=('bmake' 'libbsd')
+provides=()
+source=($pkgname.tar.gz)
+
+package() {
+  export DESTDIR=$pkgdir
+  export BINDIR=/bin
+  export MANDIR=/usr/share/man
+  cd $srcdir/$pkgname
+  bmake install
+}
+
+sha1sums=('cb0e0d9fe48e8cb0d329a791a835031923b86dec')
