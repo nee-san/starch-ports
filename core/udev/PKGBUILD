@@ -14,6 +14,7 @@ arch=(i686 x86_64)
 license=('GPL')
 makedepends=('gperf' 'usbutils' 'kmod')
 source=(ftp://ftp.kernel.org/pub/linux/utils/kernel/hotplug/$pkgname-$pkgver.tar.xz
+	no_ts_usec.diff
 	0001-reinstate-TIMEOUT-handling.patch
 	initcpio-hooks-udev
 	initcpio-install-udev)
@@ -25,7 +26,8 @@ options=(!makeflags !libtool)
 build() {
   cd $srcdir/$pkgname-$pkgver
 
-  patch -p1 -i ../0001-reinstate-TIMEOUT-handling.patch
+  patch -p 1 < ../0001-reinstate-TIMEOUT-handling.patch
+  patch -p 1 < ../no_ts_usec.diff
 
   ./configure --prefix=/usr \
               --with-rootprefix= \
@@ -38,6 +40,8 @@ build() {
               --disable-gudev \
               --disable-introspection \
 #              --enable-udev_acl
+
+  echo Makefile | situ 'sed ''s/-Wtype-limits//'''
 
   make
 }
@@ -64,7 +68,9 @@ package() {
             s#GROUP="tape"#GROUP="storage"#g;
             s#GROUP="cdrom"#GROUP="optical"#g'\'
 }
-md5sums=('0d7af750702620a871b9f9b98d8ad859'
-         'f758b3e62ab77a1a6b7be12bb900cb2d'
-         'a4dd853050bf2e0ae6b2e3d2c75499c2'
-         'ee0bfe91a20fff12cc25ab1d1e024853')
+
+sha1sums=('75c17faeafc13f0e7ba7b7e1d233f602945734bb'
+          'f2c0c9a65e056a88361395087a2beb291f46c898'
+          '6239f39a74f215c50deac9d0ac1932608c4352ea'
+          '02ac41710e182d6d575a6950f14170e75e5d18e3'
+          '52622817eb0a097f14a371f207326e54241a99e7')

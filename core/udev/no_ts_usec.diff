@@ -1,0 +1,18 @@
+diff -ur udev-181_/src/libudev-util.c udev-181/src/libudev-util.c
+--- udev-181_/src/libudev-util.c	2012-10-04 21:08:33.252291653 -0500
++++ udev-181/src/libudev-util.c	2012-10-04 21:08:52.795927314 -0500
+@@ -552,14 +552,6 @@
+         return bits;
+ }
+ 
+-#define USEC_PER_SEC  1000000ULL
+-#define NSEC_PER_USEC 1000ULL
+-unsigned long long ts_usec(const struct timespec *ts)
+-{
+-        return (unsigned long long) ts->tv_sec * USEC_PER_SEC +
+-               (unsigned long long) ts->tv_nsec / NSEC_PER_USEC;
+-}
+-
+ unsigned long long now_usec(void)
+ {
+         struct timespec ts;
