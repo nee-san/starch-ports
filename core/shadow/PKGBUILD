@@ -10,7 +10,8 @@ arch=('i686' 'x86_64')
 url='http://pkg-shadow.alioth.debian.org/'
 license=('BSD')
 groups=('base')
-depends=('bash' 'pam' 'acl')
+depends=('bash')
+makedepends=('acl')
 backup=(etc/login.defs
         etc/pam.d/{chage,passwd,shadow,useradd,usermod,userdel}
         etc/pam.d/{chpasswd,newusers,groupadd,groupdel,groupmod}
@@ -40,7 +41,6 @@ build() {
   # avoid transitive linking issues with binutils 2.22
   #sed -i '/^user\(mod\|add\)_LDADD/s|$| -lattr|' src/Makefile.am
 
-  # link to glibc's crypt(3)
   LDFLAGS+=" -lcrypt -lc"
 
   # need to offer these upstream
