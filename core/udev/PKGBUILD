@@ -8,7 +8,7 @@ pkgname=udev
 pkgver=181
 pkgrel=5
 pkgdesc="The userspace dev tools (udev)"
-depends=('util-linux' 'libusb-compat' 'kmod' 'pciutils' 'usbutils' 'acl')
+depends=('util-linux' 'libusb-compat' 'kmod' 'pciutils' 'usbutils')
 install=udev.install
 arch=(i686 x86_64)
 license=('GPL')
@@ -39,7 +39,7 @@ build() {
               --disable-gtk-doc{,-{html,pdf}} \
               --disable-gudev \
               --disable-introspection \
-#              --enable-udev_acl
+              --disable-udev_acl
 
   echo Makefile | situ 'sed ''s/-Wtype-limits//'''
 
