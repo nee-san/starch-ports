@@ -1,0 +1,34 @@
+# $Id: PKGBUILD 167188 2012-09-27 01:16:40Z dreisner $
+# Maintainer: Dave Reisner <dreisner@archlinux.org>
+# Maintainer: Thomas Bächler <thomas@archlinux.org>
+
+pkgname=mkinitcpio-busybox
+pkgver=1.20.2
+pkgrel=1
+pkgdesc="base initramfs tools"
+arch=('i686' 'x86_64')
+url="http://www.busybox.net/"
+license=('GPL')
+depends=()
+options=('!buildflags')
+source=("http://busybox.net/downloads/busybox-$pkgver.tar.bz2"
+        'config')
+sha256sums=('eb13ff01dae5618ead2ef6f92ba879e9e0390f9583bd545d8789d27cf39b6882'
+            'd8064ed6ec21868e4afe057445e2d852b353abd595132cb1ca3ba345988772f0')
+
+build() {
+  cd "$srcdir/busybox-$pkgver"
+
+  local safeflags="${CARCH/_/-} -mtune=generic -Os -pipe -fno-strict-aliasing"
+
+  sed 's|^\(CONFIG_EXTRA_CFLAGS\)=.*|\1="-march='"$safeflags"'"|' \
+    "$srcdir/config" > .config
+
+  make
+}
+
+package() {
+  install -Dm755 "$srcdir/busybox-$pkgver/busybox" "$pkgdir/usr/lib/initcpio/busybox"
+}
+sha256sums=('eb13ff01dae5618ead2ef6f92ba879e9e0390f9583bd545d8789d27cf39b6882'
+            '88b79b447417cd6201c33bd07addb7460b62e252088e9a7af8a6939d3666060f')
