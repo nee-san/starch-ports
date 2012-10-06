@@ -1,0 +1,72 @@
+commit 291b3c07185ddde83aa2eba382bd00ad1a052edd
+Author: strake <strake888@gmail.com>
+Date:   Fri Aug 24 06:08:38 2012 -0500
+
+    scripts/makepkg: port to sbase
+
+diff --git a/scripts/makepkg.sh.in b/scripts/makepkg.sh.in
+index dd4066b..eec743f 100644
+--- a/scripts/makepkg.sh.in
++++ b/scripts/makepkg.sh.in
+@@ -27,7 +27,7 @@
+ 
+ # makepkg uses quite a few external programs during its execution. You
+ # need to have at least the following installed for makepkg to function:
+-#   awk, bsdtar (libarchive), bzip2, coreutils, fakeroot, file, find (findutils),
++#   awk, bsdtar (libarchive), bzip2, coreutils, diff, fakeroot, file, find (findutils),
+ #   gettext, gpg, grep, gzip, openssl, sed, tput (ncurses), xz
+ 
+ # gettext initialization
+@@ -895,15 +895,17 @@ remove_deps() {
+ 
+ 	# check for packages removed during dependency install (e.g. due to conflicts)
+ 	# removing all installed packages is risky in this case
+-	if [[ -n $(grep -xvFf <(printf '%s\n' "${current_packagelist[@]}") \
+-			<(printf '%s\n' "${original_packagelist[@]}") || true) ]]; then
++	if [[ -n $(diff -u <(printf '%s\n' "${current_packagelist[@]}")
++		           <(printf '%s\n' "${original_packagelist[@]}") | \
++		   sed -En '/^@@.*@@$/,$ s/^\+//p') ]]; then
+ 		warning "$(gettext "Failed to remove installed dependencies.")"
+ 		return 0
+ 	fi
+ 
+ 	local deplist
+-	deplist=($(grep -xvFf <(printf "%s\n" "${original_pkglist[@]}") \
+-			<(printf "%s\n" "${current_pkglist[@]}") || true))
++	deplist=($(diff -u <(printf "%s\n" "${original_pkglist[@]}")
++		           <(printf "%s\n" "${current_pkglist[@]}") | \
++		   sed -En '/^@@.*@@$/,$ s/^\+//p'))
+ 	if [[ -z $deplist ]]; then
+ 		return
+ 	fi
+@@ -1203,7 +1205,7 @@ extract_sources() {
+ 
+ 	if (( EUID == 0 )); then
+ 		# change perms of all source files to root user & root group
+-		chown -R 0:0 "$srcdir"
++		chown -r 0:0 "$srcdir"
+ 	fi
+ }
+ 
+@@ -1632,10 +1634,10 @@ check_package() {
+ 	done
+ 
+ 	# check for references to the build and package directory
+-	if find "${pkgdir}" -type f -print0 | xargs -0  grep -q -I "${srcdir}" ; then
++	if find "${pkgdir}" -type f -print0 | xargs -0  grep -q "${srcdir}" ; then
+ 		warning "$(gettext "Package contains reference to %s")" "\$srcdir"
+ 	fi
+-	if find "${pkgdir}" -type f -print0 | xargs -0  grep -q -I "${pkgdir}" ; then
++	if find "${pkgdir}" -type f -print0 | xargs -0  grep -q "${pkgdir}" ; then
+ 		warning "$(gettext "Package contains reference to %s")" "\$pkgdir"
+ 	fi
+ 
+@@ -2490,7 +2492,7 @@ if [[ ! -f $BUILDFILE ]]; then
+ 		source_safe "$BUILDFILE"
+ 	fi
+ else
+-	crlftest=$(file "$BUILDFILE" | grep -F 'CRLF' || true)
++	crlftest=$(file "$BUILDFILE" | grep 'CRLF' || true)
+ 	if [[ -n $crlftest ]]; then
+ 		error "$(gettext "%s contains %s characters and cannot be sourced.")" "$BUILDFILE" "CRLF"
+ 		exit 1
