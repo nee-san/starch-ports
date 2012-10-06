@@ -36,12 +36,13 @@ build() {
   ./configure \
       --prefix=/usr \
       --mandir=/usr/share/man \
+      --enable-static \
+      --disable-shared \
       --disable-dependency-tracking \
       --disable-ldap \
       --disable-ldaps \
       --enable-ipv6 \
       --enable-manual \
-      --enable-versioned-symbols \
       --enable-threaded-resolver \
       --without-libidn \
       --with-random=/dev/urandom \
