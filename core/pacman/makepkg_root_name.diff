@@ -1,0 +1,19 @@
+commit 149e1c135db45d29f9fa01ca236acdf34e2f8e57
+Author: strake <strake888@gmail.com>
+Date:   Fri Oct 5 23:11:14 2012 -0500
+
+    scripts/makepkg: user's name is "root", not "0"
+
+diff --git a/scripts/makepkg.sh.in b/scripts/makepkg.sh.in
+index eec743f..02012c8 100644
+--- a/scripts/makepkg.sh.in
++++ b/scripts/makepkg.sh.in
+@@ -1205,7 +1205,7 @@ extract_sources() {
+ 
+ 	if (( EUID == 0 )); then
+ 		# change perms of all source files to root user & root group
+-		chown -r 0:0 "$srcdir"
++		chown -r root:root "$srcdir"
+ 	fi
+ }
+ 

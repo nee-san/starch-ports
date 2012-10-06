@@ -23,7 +23,8 @@ source=(ftp://ftp.archlinux.org/other/pacman/$pkgname-$pkgver.tar.gz{,.sig}
         pacman.conf
         pacman.conf.x86_64
         makepkg.conf
-        makepkg_sbase.diff)
+        makepkg_sbase.diff
+        makepkg_root_name.diff)
 
 build() {
   cd $srcdir/$pkgname-$pkgver
@@ -32,6 +33,7 @@ build() {
   patch -p1 -i $srcdir/0002-Check-empty-subdirectory-ownership.patch
 
   patch -p 1 < $srcdir/makepkg_sbase.diff
+  patch -p 1 < $srcdir/makepkg_root_name.diff
 
   ac_cv_func_malloc_0_nonnull=yes \
   libcurl_cv_lib_curl_usable=yes \
@@ -90,4 +92,5 @@ sha1sums=('c39f55d3ea763dc9fd88ab1dfa21da96d768b9d9'
           'b5539cccca3eda3a6b8c9fb2d841fc9fa94fe3e6'
           '93c24062aa1b1155d8741140cf08e29a91cca103'
           '84c446ed14b804f8dea2f0548bb9b447cd816f36'
-          'd74d3ac0ef7b8b1d7d9973f37207ef1be76b11e3')
+          'd74d3ac0ef7b8b1d7d9973f37207ef1be76b11e3'
+          '9afdce52844a4879d8154f7cbacf6a845f73857c')
