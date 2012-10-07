@@ -1,0 +1,35 @@
+# $Id: PKGBUILD 62917 2012-01-29 07:15:53Z spupykin $
+# Maintainer: Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Contributor: Hannes Rist <hrist@phreeknet.org>
+
+pkgname=mg
+pkgver=20110905
+pkgrel=1
+pkgdesc="mg is Micro GNU/emacs, this is a portable version of the mg maintained by the OpenBSD team."
+arch=('i686' 'x86_64')
+url="http://homepage.boetes.org/software/mg/"
+depends=('ncurses')
+license=('custom')
+options=(!libtool)
+source=(http://homepage.boetes.org/software/mg/mg-$pkgver.tar.gz
+	README
+	cleanup.patch)
+md5sums=('2de35316fa8ebafe6003efaae70b723e'
+         '8cc5195ad4fabcf7c6782764f9617748'
+         'e009afe0d249593f3436b2fea110f72e')
+
+build() {
+  cd $srcdir/$pkgname-$pkgver
+  echo Makefile.in | situ 'sed s/-but-set-variable//'
+  unset CFLAGS
+  patch -p1 <$srcdir/cleanup.patch
+  ./configure
+  make prefix=/usr
+
+  mkdir -p $pkgdir/usr/bin
+  make install INSTALL=/bin/install prefix=$pkgdir/usr
+
+  mkdir -p $pkgdir/usr/share/
+  mv $pkgdir/usr/man $pkgdir/usr/share/
+  install -D -m0644 $srcdir/README $pkgdir/usr/share/licenses/$pkgname/README
+}
