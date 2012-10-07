@@ -13,21 +13,23 @@ groups=('base')
 source=(ftp://sources.redhat.com/pub/lvm2/LVM2.${pkgver}.tgz
         lvm2_install
         lvm2_hook
-        11-dm-initramfs.rules)
-sha1sums=('f61dfbd8e9219291d11de3d70f0b3d20a29fae85'
-          '7f108b2f2056eb050fc898bf5190ecf9145aed8a'
-          '7d63aa838703c9f986531a78164b556f765f5cce'
-          'f6a554eea9557c3c236df2943bb6e7e723945c41')
+        11-dm-initramfs.rules
+        less_bullshit.diff)
 
 build() {
   cd "${srcdir}/LVM2.${pkgver}"
   sed -i 's|/usr/bin/tr|/bin/tr|' scripts/lvmdump.sh
+  patch -p 1 < ../less_bullshit.diff
   unset LDFLAGS
+  ac_cv_func_malloc_0_nonnull=yes \
+  ac_cv_func_realloc_0_nonnull=yes \
   ./configure --prefix= --sysconfdir=/etc --localstatedir=/var --datarootdir=/usr/share \
-    --includedir=/usr/include --with-usrlibdir=/usr/lib \
-    --enable-pkgconfig --enable-readline --enable-dmeventd --enable-cmdlib --enable-applib \
+    --includedir=/usr/include --with-usrlibdir=/usr/lib --enable-static_link \
+    --enable-pkgconfig --disable-readline --disable-dmeventd --enable-cmdlib --enable-applib \
     --with-udevdir=/lib/udev/rules.d/ --enable-udev_sync --enable-udev_rules
-  make
+  echo make.tmpl | situ 'sed s/-ludev/-ludev\ -lkmod/'
+  du -a | cut -f 2 | grep '/Makefile$' | situ 'sed '\''s/install_[a-z]*_dynamic//g'\'
+  make LIB_SHARED=
 }
 
 package_device-mapper() {
@@ -36,25 +38,31 @@ package_device-mapper() {
   depends=('udev')
 
   cd "${srcdir}/LVM2.${pkgver}"
-  make DESTDIR="${pkgdir}" install_device-mapper
+  make LIB_SHARED= DESTDIR="${pkgdir}" install_device-mapper
   # extra udev rule for device-mapper in initramfs
   install -D -m644 "${srcdir}/11-dm-initramfs.rules" "${pkgdir}/lib/initcpio/udev/11-dm-initramfs.rules"
 }
 
 package_lvm2() {
   pkgdesc="Logical Volume Manager 2 utilities"
-  depends=('bash' "device-mapper>=${pkgver}" 'udev' 'readline')
+  depends=('bash' "device-mapper>=${pkgver}" 'udev')
   conflicts=('lvm' 'mkinitcpio<0.7')
   backup=('etc/lvm/lvm.conf')
   options=('!makeflags')
 
   cd "${srcdir}/LVM2.${pkgver}"
-  make DESTDIR="${pkgdir}" install_lvm2
+  make LIB_SHARED= DESTDIR="${pkgdir}" install_lvm2
   # install applib
-  make -C liblvm DESTDIR="${pkgdir}" install
+  make -C liblvm LIB_SHARED= DESTDIR="${pkgdir}" install
   # /etc directories
   install -d "${pkgdir}"/etc/lvm/{archive,backup}
   # mkinitcpio hook
   install -D -m644 "${srcdir}/lvm2_hook" "${pkgdir}/lib/initcpio/hooks/lvm2"
   install -D -m644 "${srcdir}/lvm2_install" "${pkgdir}/lib/initcpio/install/lvm2"
 }
+
+sha1sums=('f61dfbd8e9219291d11de3d70f0b3d20a29fae85'
+          '7f108b2f2056eb050fc898bf5190ecf9145aed8a'
+          '7d63aa838703c9f986531a78164b556f765f5cce'
+          'f6a554eea9557c3c236df2943bb6e7e723945c41'
+          '207b4c849221174985eee372501fc61190c0c55b')

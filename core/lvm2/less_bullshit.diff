@@ -1,0 +1,33 @@
+--- LVM2.2.02.95_/lib/misc/sharedlib.h	2012-10-06 23:22:52.012237510 -0500
++++ LVM2.2.02.95/lib/misc/sharedlib.h	2012-10-06 23:26:15.828722857 -0500
+@@ -17,7 +17,11 @@
+ #define _LVM_SHAREDLIB_H
+ 
+ #include "config.h"
+-#include <dlfcn.h>
++
++#define RTLD_LAZY   0
++#define RTLD_NOW    0
++#define RTLD_GLOBAL 0
++#define RTLD_LOCAL  0
+ 
+ void get_shared_library_path(struct cmd_context *cmd, const char *libname,
+ 			     char *path, size_t path_len);
+--- LVM2.2.02.95_/tools/Makefile.in	2012-10-06 23:22:52.025571052 -0500
++++ LVM2.2.02.95/tools/Makefile.in	2012-10-06 23:39:50.781325870 -0500
+@@ -148,13 +148,10 @@
+ 	$(AR) rs $@ $(OBJECTS) lvmcmdlib.o lvm2cmd-static.o
+ 
+ liblvm2cmd.$(LIB_SUFFIX): liblvm2cmd.a $(LDDEPS)
+-	$(CC) -shared -Wl,-soname,$@.$(LIB_VERSION) \
+-		$(CFLAGS) $(CLDFLAGS) -o $@ \
+-		@CLDWHOLEARCHIVE@ liblvm2cmd.a @CLDNOWHOLEARCHIVE@ \
+-		$(LVMLIBS) $(LIBS)
++	true
+ 
+ liblvm2cmd.$(LIB_SUFFIX).$(LIB_VERSION): liblvm2cmd.$(LIB_SUFFIX)
+-	$(LN_S) -f $< $@
++	true
+ 
+ .commands: $(srcdir)/commands.h $(srcdir)/cmdnames.h Makefile
+ 	$(CC) -E -P $(srcdir)/cmdnames.h 2> /dev/null | \
