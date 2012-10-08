@@ -8,6 +8,7 @@ pkgdesc="library that can create and read several streaming archive formats"
 arch=('i686' 'x86_64')
 url="http://libarchive.googlecode.com/"
 license=('BSD')
+provides=('tar' 'cpio')
 depends=()
 makedepends=('zlib' 'bzip2' 'xz>=5.0.0' 'acl' 'openssl>=1.0.0' 'expat')
 source=("https://github.com/downloads/libarchive/libarchive/libarchive-${pkgver}.tar.gz"
@@ -38,7 +39,5 @@ package() {
   ln $pkgdir/usr/bin/bsdcpio $pkgdir/bin/cpio
 }
 
-md5sums=('af443ca9a10ddbcbf00f7ae34ca7fc16'
-         'cd473e13378932fef53ad0df10118013')
 sha256sums=('76e8d7c7b100ec4071e48c1b7d3f3ea1d22b39db3e45b7189f75b5ff4df90fac'
-            '2f7f90e1cf050a4a35d168c117862801a49566040afb8503a5cc178a6eeefc12')
+            '4ce1561a6b83de9904beb0c3fa57b4814f933b0b6afecf461b2a0a1322d60943')
