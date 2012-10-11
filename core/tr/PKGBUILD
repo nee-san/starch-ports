@@ -1,7 +1,7 @@
 pkgname=tr
 pkgver=0
 pkgrel=1
-pkgdesc="Stream Editor"
+pkgdesc="tr utility"
 arch=('x86_64')
 url="http://openbsd.org"
 license=('BSD')
