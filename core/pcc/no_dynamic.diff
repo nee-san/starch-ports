@@ -1,0 +1,23 @@
+--- pcc-1.0.0/cc/cc/cc.c	2011-03-15 14:25:36.000000000 -0500
++++ pcc-1.0.0/cc/cc/cc.c	2012-10-11 07:18:38.558990895 -0500
+@@ -1018,18 +1018,11 @@
+ 			}
+ #endif
+ #endif
+-			if (Bstatic == 0) { /* Dynamic linkage */
+-#ifdef DYNLINKER
+-				for (i = 0; dynlinker[i]; i++)
+-					av[j++] = dynlinker[i];
+-#endif
+-			} else {
+ #ifdef os_darwin
+-				av[j++] = "-static";
++			av[j++] = "-static";
+ #else
+-				av[j++] = "-Bstatic";
++			av[j++] = "-Bstatic";
+ #endif
+-			}
+ 		}
+ 		if (outfile) {
+ #ifdef MSLINKER
