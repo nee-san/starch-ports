@@ -9,14 +9,11 @@ url="http://pcc.ludd.ltu.se/"
 license=('custom')
 makedepends=()
 depends=('pcc-libs>=1.0.0')
-source=(ftp://pcc.ludd.ltu.se/pub/pcc-releases/${pkgname}-${pkgver}.tgz
-        license
-        no_dynamic.diff)
+source=(http://strake.zanity.net:1104/${pkgname}-${pkgver}.tar.gz
+        license)
 
 build() {
   cd ${srcdir}/${pkgname}-${pkgver}
-
-  patch -p 1 < ../no_dynamic.diff
 
   ./configure --prefix=/usr || return 1
 
@@ -33,6 +30,5 @@ package(){
   install -D -m0644 ${srcdir}/license ${pkgdir}/usr/share/licenses/pcc/license
 }
 
-sha1sums=('a994d6bf75ae81add70d35478b59fca7c63bd5df'
-          '47cf7cca69caf4d600eb5a2d45a1e36623948025'
-          'fc42394a415fde57332d2e0b52542fe870a3b55a')
+sha1sums=('6892d9c89732aafa64983dd1ba440b6bc80a8347'
+          '47cf7cca69caf4d600eb5a2d45a1e36623948025')
