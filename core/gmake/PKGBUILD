@@ -1,0 +1,71 @@
+# $Id: PKGBUILD 166683 2012-09-15 15:22:53Z allan $
+# Maintainer: Allan McRae <allan@archlinux.org>
+# Contributor: judd <jvinet@zeroflux.org>
+
+gpkgname=make
+pkgname=gmake
+pkgver=3.82
+pkgrel=5
+pkgdesc="GNU make utility to maintain groups of programs"
+arch=('i686' 'x86_64')
+url="http://www.gnu.org/software/make"
+license=('GPL3')
+groups=('base-devel')
+depends=('sh')
+install=$pkgname.install
+source=(ftp://ftp.gnu.org/gnu/${gpkgname}/${gpkgname}-${pkgver}.tar.bz2{,.sig}
+        make-3.82-bug30612.patch
+        make-3.82-bug30723.patch
+        make-3.82-sort-blank.patch
+        make-3.82-makeflags.patch
+        make-3.82-expensive_glob.patch
+        make-3.82-dont-prune-intermediate.patch
+        make-3.82-unbreak-argument-parser.patch)
+
+build() {
+  cd ${srcdir}/${gpkgname}-${pkgver}
+  
+  # http://savannah.gnu.org/bugs/?30612
+  patch -Np1 -i $srcdir/make-3.82-bug30612.patch
+  
+  # http://savannah.gnu.org/bugs/?30723
+  patch -Np1 -i $srcdir/make-3.82-bug30723.patch
+  
+  # https://bugs.archlinux.org/task/22733 (fix from Fedora)
+  patch -Np1 -i $srcdir/make-3.82-sort-blank.patch
+  
+  # https://savannah.gnu.org/bugs/?33873
+  patch -Np0 -i $srcdir/make-3.82-makeflags.patch
+  
+  # http://lists.gnu.org/archive/html/bug-make/2011-04/msg00002.html
+  patch -Np0 -i $srcdir/make-3.82-expensive_glob.patch
+ 
+  # https://savannah.gnu.org/bugs/?30653
+  patch -Np0 -i $srcdir/make-3.82-dont-prune-intermediate.patch
+
+  patch -Np 0 < ../make-3.82-unbreak-argument-parser.patch
+
+  make_cv_sys_gnu_glob=no \
+  ./configure --prefix=/usr --program-prefix=g
+  make
+}
+
+check() {
+  cd ${srcdir}/${gpkgname}-${pkgver}
+  #make check
+}
+
+package() {
+  cd ${srcdir}/${gpkgname}-${pkgver}
+  make DESTDIR=${pkgdir} install
+}
+
+sha1sums=('b8a8a99e4cb636a213aad3816dda827a92b9bbed'
+          '67c82d0d50463068f36c2eb7400044840391009d'
+          '619300c1e99b7e2ac0e22e847518d2602cc48e1d'
+          'fe146c78582903f57416da35cc64fb85f9e796b5'
+          '8f0d758ea830c2e6f5f744ccd672bf388e737c75'
+          '01239583ba9f5a9c2f9fc8346a24be5895c3d199'
+          '82831898c2a3809d32f1a761c34383459f9d1737'
+          'a0b859ea934ebfee7d914d34b3bb09a9df34c3f0'
+          '9c91f98efb38acac5e538597560f3b0d65f9faf5')

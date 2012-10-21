@@ -1,0 +1,11 @@
+--- main.c	2012-10-21 08:29:37.169938978 -0500
++++ main.c	2012-10-21 08:29:23.066387400 -0500
+@@ -2508,7 +2508,7 @@
+      but not for options from the environment.  */
+   opterr = !env;
+   /* Reset getopt's state.  */
+-  optind = 0;
++  optind = 1;
+ 
+   while (optind < argc)
+     {
