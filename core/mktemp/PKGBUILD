@@ -1,0 +1,26 @@
+pkgname=mktemp
+pkgver=15635.1
+pkgrel=1
+pkgdesc="Temporary File Maker Utility"
+arch=('x86_64')
+url="http://openbsd.org"
+license=('BSD')
+groups=() 
+makedepends=('bmake' 'libbsd')
+source=($pkgname.tar.gz)
+
+build() {
+  cd $srcdir/$pkgname
+  test -z $CC && export CC=cc
+  bmake CC=$CC CFLAGS="$CFLAGS -D__dead=" LDFLAGS="$LDFLAGS" LDADD='-lbsd'
+}
+
+package() {
+  export DESTDIR=$pkgdir
+  export BINDIR=/bin
+  export MANDIR=/usr/share/man
+  cd $srcdir/$pkgname
+  bmake install
+}
+
+sha1sums=('5d9c0d4ec4bf3370f4ad81ae84d6628e553b7f72')
