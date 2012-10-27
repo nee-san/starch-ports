@@ -1,19 +1,52 @@
-pkgname=situ
-pkgver=0
+pkgname=('situ-bourne-git' 'situ-rc-git')
+pkgver=20121027
 pkgrel=1
-pkgdesc="Alter files in situ"
+pkgdesc="Alter files in situ; Bourne syntax"
 arch=('x86_64')
-url="http://strake.zanity.net:1104/situ/"
 license=('Other')
 groups=()
-depends=('rc' 'dc')
-source=(http://strake.zanity.net:1104/situ/situ{,.1})
+makedepends=('git')
 
-package() {
+_gitroot=http://strake.zanity.net:1104/situ.git
+_gitname=situ
+
+build() {
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+
+  if [[ -d "$_gitname" ]]; then
+    cd "$_gitname" && git pull origin
+    msg "The local files are updated."
+  else
+    git clone "$_gitroot" "$_gitname"
+  fi
+
+  msg "GIT checkout done or server timeout"
+  msg "Starting build..."
+
+  rm -rf "$srcdir/$_gitname-build"
+  git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+  cd "$srcdir/$_gitname-build"
+}
+
+package_situ-bourne-git () {
+  depends=('sh' 'dc')
+  provides=('situ')
+  conflicts=('situ')
+
   install -dm 755 $pkgdir/bin
   install -dm 755 $pkgdir/usr/share/man/man1
-  install -m 755 $srcdir/situ $pkgdir/bin/
-  install -m 644 $srcdir/situ.1 $pkgdir/usr/share/man/man1/
+  install -m 755 $srcdir/situ/situ.sh $pkgdir/bin/situ
+  install -m 644 $srcdir/situ/situ.1 $pkgdir/usr/share/man/man1/
 }
-sha1sums=('010cb344201e97ecaecdd33fa163913b3c562ca5'
-          'debd5ffb1948c9a5dca92aea9b4d93668ee33886')
+
+package_situ-rc-git () {
+  depends=('rc' 'dc')
+  provides=('situ')
+  conflicts=('situ')
+
+  install -dm 755 $pkgdir/bin
+  install -dm 755 $pkgdir/usr/share/man/man1
+  install -m 755 $srcdir/situ/situ.rc $pkgdir/bin/situ
+  install -m 644 $srcdir/situ/situ.1 $pkgdir/usr/share/man/man1/
+}
