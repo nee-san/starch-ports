@@ -8,6 +8,7 @@ pkgrel=1
 pkgdesc="mg is Micro GNU/emacs, this is a portable version of the mg maintained by the OpenBSD team."
 arch=('i686' 'x86_64')
 url="http://homepage.boetes.org/software/mg/"
+groups=('base')
 depends=('ncurses')
 license=('custom')
 options=(!libtool)
