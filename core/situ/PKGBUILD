@@ -4,7 +4,7 @@ pkgrel=1
 pkgdesc="Alter files in situ; Bourne syntax"
 arch=('x86_64')
 license=('Other')
-groups=()
+groups=('base')
 makedepends=('git')
 
 _gitroot=http://strake.zanity.net:1104/situ.git
