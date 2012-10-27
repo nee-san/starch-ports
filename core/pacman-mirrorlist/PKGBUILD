@@ -1,0 +1,31 @@
+# $Id: PKGBUILD 166500 2012-09-08 12:27:50Z dan $
+# Maintainer: Dan McGee <dan@archlinux.org>
+
+pkgname=pacman-mirrorlist
+pkgver=20120908
+pkgrel=1
+pkgdesc="Arch Linux mirror list for use by pacman"
+arch=('any')
+url="http://www.archlinux.org/mirrorlist/"
+license=('GPL')
+backup=(etc/pacman.d/mirrorlist)
+source=(mirrorlist)
+
+# NOTE on building this package:
+# * Go to the trunk/ directory
+# * Run bash -c ". PKGBUILD; updatelist"
+# * Update the checksums, update pkgver
+# * Build the package
+
+updatelist() {
+  rm -f mirrorlist
+  wget -O mirrorlist https://www.archlinux.org/mirrorlist/all/smart/
+}
+
+build() {
+  mkdir -p $pkgdir/etc/pacman.d
+  install -m644 $srcdir/mirrorlist $pkgdir/etc/pacman.d/
+}
+
+md5sums=('6ca109b6d37df72c2a88fc48e7f319a4')
+sha256sums=('669e6e0d3d0db1f992afe8629c87216f7cea4958901a4af96ec535852e0189eb')
