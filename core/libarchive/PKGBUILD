@@ -3,7 +3,7 @@
 
 pkgname=libarchive
 pkgver=3.0.4
-pkgrel=1
+pkgrel=2
 pkgdesc="library that can create and read several streaming archive formats"
 arch=('i686' 'x86_64')
 url="http://libarchive.googlecode.com/"
@@ -17,6 +17,7 @@ source=("https://github.com/downloads/libarchive/libarchive/libarchive-${pkgver}
 build() {
   cd "$srcdir/$pkgname-$pkgver"
   patch -p 1 < ../sanity.diff
+  ac_cv_func_fstatfs=no ac_cv_func_fstatvfs=no \
   ./configure --prefix=/usr --without-xml2 --without-expat --without-iconv --enable-static --disable-shared
   make
 }
