@@ -1,0 +1,22 @@
+pkgname=mdocml
+pkgver=1.9.9
+pkgrel=1
+pkgdesc="Manual Page Compiler"
+arch=('x86_64')
+url="http://mdocml.bsd.lv/"
+license=('ISC')
+groups=()
+depends=()
+makedepends=()
+source=(http://mdocml.bsd.lv/snapshots/$pkgname-$pkgver.tar.gz)
+md5sums=('d54e4b67308b44f895aa09c79cc6762c')
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  make
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  make PREFIX="$pkgdir" install
+}
