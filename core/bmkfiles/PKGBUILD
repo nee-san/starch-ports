@@ -18,4 +18,4 @@ package() {
   bmake install
 }
 
-sha1sums=('05e10e100c11eb1920257babbba077e88c19021b')
+sha1sums=('90df216ffaa397f84b8f992e074ed11014b0fb85')
