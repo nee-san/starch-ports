@@ -1,5 +1,5 @@
 pkgname=bmkfiles
-pkgver=15675
+pkgver=15678
 pkgrel=1
 pkgdesc="BSD Make"
 arch=('x86_64')
@@ -18,4 +18,4 @@ package() {
   bmake install
 }
 
-sha1sums=('90df216ffaa397f84b8f992e074ed11014b0fb85')
+sha1sums=('b798175d213b3f17288af90ce2a3f369dddf9ef1')
