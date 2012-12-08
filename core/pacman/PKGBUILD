@@ -12,7 +12,7 @@ url="http://www.archlinux.org/pacman/"
 license=('GPL')
 groups=('base')
 depends=('bash' 'pacman-mirrorlist' 'archlinux-keyring')
-makedepends=('libarchive>=3.0.2' 'curl>=7.19.4' 'gpgme' 'asciidoc')
+makedepends=('libarchive' 'curl>=7.19.4')
 optdepends=('fakeroot: for makepkg usage as normal user')
 backup=(etc/pacman.conf etc/makepkg.conf)
 install=pacman.install
