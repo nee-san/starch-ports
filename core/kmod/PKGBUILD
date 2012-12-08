@@ -8,7 +8,7 @@ pkgdesc="Linux kernel module handling"
 arch=('i686' 'x86_64')
 url='http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary'
 license=('GPL2')
-makedepends=('uClibc' 'zlib')
+makedepends=('zlib')
 options=('!libtool')
 provides=('module-init-tools=3.16')
 conflicts=('module-init-tools')

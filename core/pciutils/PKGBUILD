@@ -9,7 +9,7 @@ license=('GPL2')
 groups=('base')
 url="http://mj.ucw.cz/sw/pciutils/"
 depends=('hwids')
-makedepends=('uClibc')
+makedepends=()
 source=(#ftp://ftp.kernel.org/pub/software/utils/${pkgname}/${pkgname}-${pkgver}.tar.bz2
        ftp://atrey.karlin.mff.cuni.cz/pub/linux/pci/${pkgname}-${pkgver}.tar.gz)
 md5sums=('cdb1e5a95ab7ac67349f10c8f77a6d3c')

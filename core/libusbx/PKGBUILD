@@ -3,7 +3,7 @@
 pkgname=libusbx
 pkgver=1.0.12
 pkgrel=2
-makedepends=('uClibc')
+makedepends=()
 pkgdesc="Library that provides generic access to USB device"
 arch=(i686 x86_64)
 url="http://libusbx.org"

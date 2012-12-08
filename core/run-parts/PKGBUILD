@@ -8,7 +8,7 @@ pkgdesc='run scripts or programs in a directory'
 arch=('i686' 'x86_64')
 url='http://packages.qa.debian.org/d/debianutils.html'
 license=('GPL')
-makedepends=('uClibc')
+makedepends=()
 source=("ftp://ftp.archlinux.org/other/run-parts/debianutils_${pkgver}.tar.gz")
 sha256sums=('0062d774306a6acc34d3b855a5c4eeb845653b0cd34dbb5c13aa00b4ecb8af22')
 

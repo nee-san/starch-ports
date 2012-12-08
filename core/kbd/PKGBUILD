@@ -8,7 +8,7 @@ pkgdesc="Keytable files and keyboard utilities"
 arch=('i686' 'x86_64')
 url="ftp://ftp.altlinux.org/pub/people/legion/kbd/"
 license=('GPL')
-makedepends=('uClibc')
+makedepends=()
 source=(ftp://ftp.altlinux.org/pub/people/legion/kbd/${pkgname}-${pkgver}.tar.gz
         fix-es.po.patch
         kbd_no_error.diff)
