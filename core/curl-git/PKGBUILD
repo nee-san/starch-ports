@@ -1,0 +1,40 @@
+pkgname=curl-git
+pkgver=20121204
+pkgrel=1
+pkgdesc="An URL retrival utility and library"
+arch=('x86_64')
+url="https://github.com/StarchLinux/curl"
+license=('MIT')
+makedepends=('git' 'zlib')
+provides=('curl')
+conflicts=('curl')
+
+_gitroot=git://github.com/StarchLinux/curl.git
+_gitname=curl
+
+build() {
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+
+  if [[ -d "$_gitname" ]]; then
+    cd "$_gitname" && git pull origin
+    msg "The local files are updated."
+  else
+    git clone "$_gitroot" "$_gitname"
+  fi
+
+  msg "GIT checkout done or server timeout"
+  msg "Starting build..."
+
+  rm -rf "$srcdir/$_gitname-build"
+  git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+  cd "$srcdir/$_gitname-build"
+
+  test -z "$CC" && export CC=cc
+  bmake CC="$CC"
+}
+
+package() {
+  cd "$srcdir/$_gitname-build"
+  bmake DESTDIR="$pkgdir/" BINDIR="bin/" HDRDIR="include/" install
+}
