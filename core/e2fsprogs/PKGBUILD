@@ -31,12 +31,12 @@ build() {
   ./configure --prefix=/usr --with-root-prefix="" \
       --disable-fsck --disable-uuidd \
 
-  make
+  gmake
 }
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  make DESTDIR="${pkgdir}" install install-libs
+  gmake DESTDIR="${pkgdir}" install install-libs
 
   echo "${pkgdir}/usr/bin/compile_et" | situ "sed 's/^AWK=.*/AWK=awk/'"
   
