@@ -38,7 +38,7 @@ build() {
   ac_cv_func_malloc_0_nonnull=yes \
   libcurl_cv_lib_curl_usable=yes \
   ./configure --prefix=/usr --sysconfdir=/etc \
-    --localstatedir=/var --enable-doc --enable-static
+    --localstatedir=/var --enable-doc --enable-static --disable-shared
   make
 }
 
