@@ -19,7 +19,7 @@ build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   echo configure | situ "sed 's#\$(datadir)/misc#\$(datadir)#'"
   
-  ./configure --prefix=/usr --datadir=/usr/share/file
+  ./configure --prefix=/usr --datadir=/usr/share/file --enable-static --disable-shared
   make 
 }
 
