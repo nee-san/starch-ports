@@ -32,7 +32,7 @@ build() {
   cd "$srcdir/$_gitname-build"
 
   test -z "$CC" && export CC=cc
-  bmake CC="$CC"
+  bmake CC="$CC" LDADD="-lbsd"
 }
 
 package() {
