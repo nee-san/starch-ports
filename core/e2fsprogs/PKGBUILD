@@ -23,13 +23,15 @@ build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
 
   # Remove unnecessary init.d directory
-  echo misc/Makefile.in | situ "sed '/init\.d/s|^|#|'"
+  echo misc/Makefile.in | situ "sed '"'/init\.d/s|^|#|'\'
 
   patch -p 1 < ../fallocate.diff
   cp ../fallocate.c lib/ext2fs/
 
   ./configure --prefix=/usr --with-root-prefix="" \
       --disable-fsck --disable-uuidd \
+
+  echo lib/ext2fs/ext2_types.h | situ "sed '"'s/^confdefs\.h://'\'
 
   gmake
 }
