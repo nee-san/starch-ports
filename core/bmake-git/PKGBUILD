@@ -1,0 +1,41 @@
+pkgname=bmake-git
+pkgver=20121208
+pkgrel=1
+pkgdesc="BSD make"
+arch=('x86_64')
+url="https://github.com/StarchLinux/bmake"
+license=('BSD')
+groups=('base')
+makedepends=('git' 'libbsd')
+provides=('make')
+conflicts=('make')
+
+_gitroot=git://github.com/StarchLinux/bmake.git
+_gitname=bmake
+
+build() {
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+
+  if [[ -d "$_gitname" ]]; then
+    cd "$_gitname" && git pull origin
+    msg "The local files are updated."
+  else
+    git clone "$_gitroot" "$_gitname"
+  fi
+
+  msg "GIT checkout done or server timeout"
+  msg "Starting build..."
+
+  rm -rf "$srcdir/$_gitname-build"
+  git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+  cd "$srcdir/$_gitname-build"
+
+  test -z "$CC" && export CC=cc
+  bmake CC="$CC"
+}
+
+package() {
+  cd "$srcdir/$_gitname-build"
+  bmake DESTDIR="$pkgdir/" BINDIR="bin/" HDRDIR="include/" install
+}
