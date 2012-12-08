@@ -36,5 +36,5 @@ build() {
 
 package() {
   cd "$srcdir/$_gitname-build"
-  bmake DESTDIR="$pkgdir/" BINDIR="bin/" HDRDIR="include/" install
+  bmake DESTDIR="$pkgdir/" BINDIR="bin/" HDRDIR="include/curl/" install
 }
