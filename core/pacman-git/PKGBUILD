@@ -1,0 +1,47 @@
+pkgname=pacman-git
+pkgver=20121209
+pkgrel=1
+pkgdesc="A library-based package manager with dependency support"
+arch=('x86_64')
+url="http://www.archlinux.org/pacman/"
+license=('GPL')
+groups=('base')
+depends=('bash' 'libarchive' 'curl' 'pacman-mirrorlist' 'archlinux-keyring')
+makedepends=('git' 'libarchive' 'curl')
+optdepends=('fakeroot: for makepkg usage as normal user')
+backup=(etc/pacman.conf etc/makepkg.conf)
+install=pacman.install
+source=(pacman.conf makepkg.conf)
+
+_gitroot=https://github.com/StarchLinux/pacman.git
+_gitname=pacman
+
+build() {
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+
+  if [[ -d "$_gitname" ]]; then
+    cd "$_gitname" && git pull origin
+    msg "The local files are updated."
+  else
+    git clone "$_gitroot" "$_gitname"
+  fi
+
+  msg "GIT checkout done or server timeout"
+  msg "Starting build..."
+
+  rm -rf "$srcdir/$_gitname-build"
+  git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+  cd "$srcdir/$_gitname-build"
+
+  test -z "$CC" && export CC=cc
+  bmake CC="$CC"
+}
+
+package() {
+  cd "$srcdir/$_gitname-build"
+  bmake DESTDIR="$pkgdir/" HDRDIR="include/" install
+}
+
+sha1sums=('93c24062aa1b1155d8741140cf08e29a91cca103'
+          '84c446ed14b804f8dea2f0548bb9b447cd816f36')
