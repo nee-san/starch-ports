@@ -18,7 +18,7 @@ source=(ftp://sources.redhat.com/pub/lvm2/LVM2.${pkgver}.tgz
 
 build() {
   cd "${srcdir}/LVM2.${pkgver}"
-  sed -i 's|/usr/bin/tr|/bin/tr|' scripts/lvmdump.sh
+  echo scripts/lvmdump.sh | situ "sed 's|/usr/bin/tr|/bin/tr|'"
   patch -p 1 < ../less_bullshit.diff
   unset LDFLAGS
   ac_cv_func_malloc_0_nonnull=yes \
