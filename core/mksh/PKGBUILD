@@ -20,11 +20,10 @@ md5sums=('22c9570660c2efadf36de7b620d06966'
 build() {
   cd "$srcdir"
   # makepkg can't extract cpio files
-  cpio -mid < "$pkgname-$pkgver.cpio"
+  (gzip -d | cpio -mid) < "$pkgname-$pkgver.cpio.gz"
 
   cd "$srcdir/$pkgname"
   sh Build.sh -r -c lto
-  ./test.sh
   gzip -n9 mksh.1
 }
 
