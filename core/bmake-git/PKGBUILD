@@ -1,5 +1,5 @@
 pkgname=bmake-git
-pkgver=20121208
+pkgver=20121214
 pkgrel=1
 pkgdesc="BSD make"
 arch=('x86_64')
@@ -7,8 +7,8 @@ url="https://github.com/StarchLinux/bmake"
 license=('BSD')
 groups=('base')
 makedepends=('git' 'libbsd')
-provides=('make')
-conflicts=('make')
+provides=('make' 'bmake')
+conflicts=('make' 'bmake')
 
 _gitroot=git://github.com/StarchLinux/bmake.git
 _gitname=bmake
@@ -38,4 +38,5 @@ build() {
 package() {
   cd "$srcdir/$_gitname-build"
   bmake DESTDIR="$pkgdir/" BINDIR="bin/" HDRDIR="include/" install
+  ln "$pkgdir/bin/make" "$pkgdir/bin/bmake"
 }
