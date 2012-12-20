@@ -10,6 +10,8 @@ url="http://mirbsd.de/mksh"
 license=("custom")
 makedepends=('cpio')
 arch=('i686' 'x86_64')
+provides=('sh')
+conflicts=('sh')
 install=mksh.install
 source=("https://www.mirbsd.org/MirOS/dist/mir/mksh/$pkgname-$pkgver.cpio.gz"
         "https://www.mirbsd.org/TaC-mksh.txt")
@@ -33,4 +35,5 @@ package() {
   install -D -m 644 mksh.1.gz "$pkgdir/usr/share/man/man1/mksh.1.gz"
   install -D -m 644 dot.mkshrc "$pkgdir/etc/skel/.mkshrc"
   install -D -m 644 "$srcdir/TaC-mksh.txt" "$pkgdir/usr/share/licenses/mksh/TaC-mksh.txt"
+  ln "$pkgdir/bin/mksh" "$pkgdir/bin/sh"
 }
