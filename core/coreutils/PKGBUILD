@@ -31,7 +31,6 @@ build() {
   rm -rf "$srcdir/$_gitname-build"
   git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
   cd "$srcdir/$_gitname-build"
-  git submodule init && git submodule update
 
   test -z "$CC" && export CC=cc
   bmake CC="$CC"
