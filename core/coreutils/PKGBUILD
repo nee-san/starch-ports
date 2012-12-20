@@ -1,12 +1,12 @@
 pkgname=coreutils-git
-pkgver=20121208
+pkgver=20121220
 pkgrel=1
 pkgdesc="Unix Core Utilites"
 arch=('x86_64')
 license=('BSD' 'Custom')
 groups=('base')
 depends=('sbase')
-makedepends=('git' 'bmake' 'libbsd' 'libtomcrypt' 'openssl')
+makedepends=('git' 'bmake' 'libbsd' 'libtommath')
 provides=('coreutils' 'sed' 'dc')
 conflicts=('coreutils' 'sed' 'dc')
 source=('install.1' 'install.sh' 'fgrep.sh' 'which.sh')
