@@ -1,15 +1,17 @@
 pkgname=coreutils-git
-pkgver=20121025
+pkgver=20121208
 pkgrel=1
 pkgdesc="Unix Core Utilites"
 arch=('x86_64')
 license=('BSD' 'Custom')
 groups=('base')
+depends=('sbase')
 makedepends=('git' 'bmake' 'libbsd' 'libtomcrypt' 'openssl')
-provides=('coreutils' 'grep' 'sed' 'dc')
-conflicts=('coreutils' 'grep' 'sed' 'dc')
+provides=('coreutils' 'sed' 'dc')
+conflicts=('coreutils' 'sed' 'dc')
+source=('install.1' 'install.sh' 'fgrep.sh' 'which.sh')
 
-_gitroot=http://strake.zanity.net:1104/coreutils.git
+_gitroot=https://github.com/StarchLinux/coreutils.git
 _gitname=coreutils
 
 build() {
@@ -31,10 +33,24 @@ build() {
   cd "$srcdir/$_gitname-build"
   git submodule init && git submodule update
 
-  bmake
+  test -z "$CC" && export CC=cc
+  bmake CC="$CC"
 }
 
 package() {
   cd "$srcdir/$_gitname-build"
   bmake DESTDIR="$pkgdir/" BINDIR=bin/ install
+
+  ln "$pkgdir/bin/rm" "$pkgdir/bin/rmdir"
+
+  mkdir -p "$pkgdir/doc/man" "$pkgdir/bin"
+  cp "$srcdir/install.1" "$pkgdir/doc/man/"
+  cp "$srcdir/install.sh" "$pkgdir/bin/install" && chmod +x "$pkgdir/bin/install"
+  cp "$srcdir/fgrep.sh"   "$pkgdir/bin/fgrep"   && chmod +x "$pkgdir/bin/fgrep"
+  cp "$srcdir/which.sh"   "$pkgdir/bin/which"   && chmod +x "$pkgdir/bin/which"
 }
+
+sha1sums=('5f6ed80b0545510f6168580f5f7930e99323caa2'
+          'da741248f10aa2b23f56b33db3571d7c42669567'
+          '75dcb3607f7c3a6395464cd28c91639fcf6b1d66'
+          '424684b11f78767265b85c5dfb6c132aa3f53acb')
