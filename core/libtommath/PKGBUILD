@@ -1,0 +1,19 @@
+pkgname=libtommath
+pkgver=0.42.0
+pkgrel=1
+pkgdesc="Big number library"
+arch=('x86_64')
+url="http://libtom.org/"
+license=('Nil')
+groups=('base')
+source=(http://libtom.org/files/ltm-$pkgver.tar.bz2)
+
+build() {
+  cd "$srcdir/$pkgname-$pkgver"
+  make
+}
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+  make DESTDIR="$pkgdir/" install
+}
