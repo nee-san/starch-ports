@@ -7,7 +7,7 @@ url=""
 license=('BSD')
 groups=()
 depends=()
-makedepends=('git')
+makedepends=('git' 'bmake')
 provides=('patch')
 conflicts=('patch')
 
