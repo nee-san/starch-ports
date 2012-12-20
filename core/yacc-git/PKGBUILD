@@ -1,0 +1,40 @@
+pkgname=yacc-git
+pkgver=0
+pkgrel=1
+pkgdesc="LALR(1) Parser Generator"
+arch=('x86_64')
+url=""
+license=('BSD')
+groups=()
+makedepends=('git' 'bmake')
+provides=('yacc')
+conflicts=('yacc')
+
+_gitroot=https://github.com/StarchLinux/yacc
+_gitname=yacc
+
+build() {
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+
+  if [[ -d "$_gitname" ]]; then
+    cd "$_gitname" && git pull origin
+    msg "The local files are updated."
+  else
+    git clone "$_gitroot" "$_gitname"
+  fi
+
+  msg "GIT checkout done or server timeout"
+  msg "Starting build..."
+
+  rm -rf "$srcdir/$_gitname-build"
+  git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+  cd "$srcdir/$_gitname-build"
+
+  bmake
+}
+
+package() {
+  cd "$srcdir/$_gitname-build"
+  bmake DESTDIR="$pkgdir/" BINDIR="bin/" install
+}
