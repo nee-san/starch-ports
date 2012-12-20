@@ -6,7 +6,7 @@ arch=('x86_64')
 url=""
 license=('MIT')
 groups=('base')
-makedepends=('git')
+makedepends=('git' 'libutf')
 provides=('sbase')
 conflicts=('sbase')
 
