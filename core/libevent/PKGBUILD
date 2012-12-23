@@ -16,7 +16,7 @@ source=(https://github.com/downloads/${pkgname}/${pkgname}/${pkgname}-$pkgver-st
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}-stable"
-  sed -i 's#python#python2#' event_rpcgen.py
+  echo event_rpcgen.py | situ "sed 's#python#python2#'"
   ./configure --prefix=/usr --sysconfdir=/etc --enable-static --disable-shared
   make
 }
