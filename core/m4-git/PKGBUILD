@@ -1,0 +1,43 @@
+pkgname=m4-git
+pkgver=0
+pkgrel=1
+pkgdesc=""
+arch=('x86_64')
+license=('BSD')
+groups=('base-hacking')
+makedepends=('git')
+provides=('m4')
+conflicts=('m4')
+
+_gitroot=https://github.com/StarchLinux/m4.git
+_gitname=m4
+
+build() {
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+
+  if [[ -d "$_gitname" ]]; then
+    cd "$_gitname" && git pull origin
+    msg "The local files are updated."
+  else
+    git clone "$_gitroot" "$_gitname"
+  fi
+
+  msg "GIT checkout done or server timeout"
+  msg "Starting build..."
+
+  rm -rf "$srcdir/$_gitname-build"
+  git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+  cd "$srcdir/$_gitname-build"
+
+  test -z $CC && export CC=cc
+  bmake CC=$CC CFLAGS="$CFLAGS -D'SIZE_MAX=((size_t)(-1))' -D__dead=" LDFLAGS="$LDFLAGS" LDADD='-lbsd'
+}
+
+package() {
+  export DESTDIR=$pkgdir
+  export BINDIR=/bin
+  export MANDIR=/usr/share/man
+  cd "$srcdir/$_gitname-build"
+  bmake install
+}
