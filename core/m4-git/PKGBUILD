@@ -31,7 +31,7 @@ build() {
   cd "$srcdir/$_gitname-build"
 
   test -z $CC && export CC=cc
-  bmake CC=$CC CFLAGS="$CFLAGS -D'SIZE_MAX=((size_t)(-1))' -D__dead=" LDFLAGS="$LDFLAGS" LDADD='-lbsd'
+  bmake CC=$CC CFLAGS="$CFLAGS -D'SIZE_MAX=((size_t)(-1))' -D__dead=" LDFLAGS="$LDFLAGS" LDADD='-lbsd -lfl'
 }
 
 package() {
