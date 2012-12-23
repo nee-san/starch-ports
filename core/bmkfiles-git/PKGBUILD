@@ -1,0 +1,35 @@
+pkgname=bmkfiles-git
+pkgver=20121223
+pkgrel=1
+pkgdesc="BSD Makefiles"
+arch=('any')
+license=('BSD')
+groups=('base')
+makedepends=('git')
+provides=('bmkfiles')
+conflicts=('bmkfiles')
+
+_gitroot=https://github.com/StarchLinux/bmkfiles.git
+_gitname=bmkfiles
+
+build() {
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+
+  if [[ -d "$_gitname" ]]; then
+    cd "$_gitname" && git pull origin
+    msg "The local files are updated."
+  else
+    git clone "$_gitroot" "$_gitname"
+  fi
+
+  msg "GIT checkout done or server timeout"
+}
+
+package() {
+  export DESTDIR=$pkgdir
+  export BINDIR=/bin
+  export MANDIR=/usr/share/man
+  cd $srcdir/$_gitname
+  bmake install
+}
