@@ -20,5 +20,6 @@ md5sums=('cea7e5347979909f458fe7ebb5a44f85')
 
 build() {
   cd $startdir/src/$pkgname-$pkgver
+  echo makefile | situ "sed -E -e '"'s/-o \$\(USER\)//g'"' -e '"'s/-g \$\(GROUP\)//g'"'"
   make NODOCS=1 DESTDIR=$startdir/pkg install
 }
