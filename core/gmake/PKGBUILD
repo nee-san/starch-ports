@@ -58,6 +58,7 @@ check() {
 package() {
   cd ${srcdir}/${gpkgname}-${pkgver}
   make DESTDIR=${pkgdir} install
+  chmod +x "$pkgdir"/usr/bin/*
 }
 
 sha1sums=('b8a8a99e4cb636a213aad3816dda827a92b9bbed'
