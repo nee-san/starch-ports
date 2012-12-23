@@ -9,7 +9,7 @@ pkgdesc="LibTomCrypt is a fairly comprehensive, modular and portable cryptograph
 url="http://libtom.org/?page=features&whatfile=crypt"
 license="public domain"
 arch=('i686' 'x86_64')
-depends=('gmp')
+depends=('libtommath')
 makedepends=()
 conflicts=()
 replaces=()
