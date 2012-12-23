@@ -40,8 +40,6 @@ package() {
   cd "$srcdir/$_gitname-build"
   bmake DESTDIR="$pkgdir/" BINDIR=bin/ install
 
-  ln "$pkgdir/bin/rm" "$pkgdir/bin/rmdir"
-
   mkdir -p "$pkgdir/doc/man" "$pkgdir/bin"
   cp "$srcdir/install.1" "$pkgdir/doc/man/"
   cp "$srcdir/install.sh" "$pkgdir/bin/install" && chmod +x "$pkgdir/bin/install"
