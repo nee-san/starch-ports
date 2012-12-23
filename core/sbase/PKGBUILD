@@ -7,7 +7,7 @@ url=""
 license=('MIT')
 groups=('base')
 makedepends=('git' 'libutf')
-provides=('sbase')
+provides=('sbase' 'grep')
 conflicts=('sbase')
 
 _gitroot=https://github.com/StarchLinux/sbase.git
