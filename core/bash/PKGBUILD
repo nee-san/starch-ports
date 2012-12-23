@@ -14,7 +14,7 @@ url="http://www.gnu.org/software/bash/bash.html"
 groups=('base')
 backup=(etc/bash.bash{rc,_logout} etc/skel/.bash{rc,_profile,_logout})
 depends=()
-makedepends=('readline>=6.1')
+makedepends=()
 provides=('sh')
 install=bash.install
 source=(http://ftp.gnu.org/gnu/bash/bash-$_basever.tar.gz{,.sig}
@@ -43,7 +43,7 @@ build() {
   export CFLAGS="${CFLAGS} ${_bashconfig[@]}"
 
   bash_cv_getenv_redef=0 \
-  ./configure --prefix=/usr --with-curses --disable-nls \
+  ./configure --prefix=/usr --with-curses --disable-nls --disable-readline \
     --without-bash-malloc --enable-static-link --without-libintl-prefix \
     --bindir=/bin --mandir=/usr/share/man --infodir=/usr/share/info
   make
