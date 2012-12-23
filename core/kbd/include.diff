@@ -1,0 +1,72 @@
+diff --git a/src/dumpkeys.c b/src/dumpkeys.c
+index 326ec37..41dd72d 100644
+--- a/src/dumpkeys.c
++++ b/src/dumpkeys.c
+@@ -12,6 +12,7 @@
+ #include <linux/kd.h>
+ #include <linux/keyboard.h>
+ #include <sys/ioctl.h>
++#include <sys/types.h>
+ #include <string.h>
+ #include <errno.h>
+ #include "ksyms.h"
+diff --git a/src/loadkeys.y b/src/loadkeys.y
+index 38f9dcf..60c12f0 100644
+--- a/src/loadkeys.y
++++ b/src/loadkeys.y
+@@ -22,6 +22,7 @@
+ #include <ctype.h>
+ #include <sys/param.h>
+ #include <sys/ioctl.h>
++#include <sys/types.h>
+ #include <linux/kd.h>
+ #include <linux/keyboard.h>
+ #include <unistd.h>
+diff --git a/src/showkey.c b/src/showkey.c
+index 988238a..9d629c2 100644
+--- a/src/showkey.c
++++ b/src/showkey.c
+@@ -7,6 +7,7 @@
+ #include <sys/ioctl.h>
+ #include <linux/kd.h>
+ #include <linux/keyboard.h>
++#include <linux/signal.h>
+ #include "getfd.h"
+ #include "nls.h"
+ #include "version.h"
+diff --git a/src/showkey.c b/src/showkey.c
+index 9d629c2..ff5aa82 100644
+--- a/src/showkey.c
++++ b/src/showkey.c
+@@ -2,7 +2,6 @@
+ #include <unistd.h>
+ #include <getopt.h>
+ #include <fcntl.h>
+-#include <signal.h>
+ #include <termios.h>
+ #include <sys/ioctl.h>
+ #include <linux/kd.h>
+diff --git a/src/kbdrate.c b/src/kbdrate.c
+index 95ff723..0929873 100644
+--- a/src/kbdrate.c
++++ b/src/kbdrate.c
+@@ -71,6 +71,7 @@ beats rebuilding the kernel!
+ #include <stdio.h>
+ #include <unistd.h>
+ #include <stdlib.h>
++#include <fcntl.h>
+ #include <errno.h>
+ #include <sys/file.h>
+ #include <sys/ioctl.h>
+diff --git a/src/openvt.c b/src/openvt.c
+index 0b81dea..c253f53 100644
+--- a/src/openvt.c
++++ b/src/openvt.c
+@@ -3,6 +3,7 @@
+ #include <unistd.h>
+ #include <getopt.h>
+ #include <dirent.h>
++#include <fcntl.h>
+ #include <pwd.h>
+ #include <errno.h>
+ #include <sys/ioctl.h>

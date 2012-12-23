@@ -1,0 +1,19 @@
+commit 7bbc37811e70f3470e12d8301ffb9500f6afbe81
+Author: strake <strake888@gmail.com>
+Date:   Sun Dec 23 12:50:24 2012 -0500
+
+    loadkeys: yylval
+
+diff --git a/src/loadkeys.analyze.l b/src/loadkeys.analyze.l
+index f817c78..a670eb4 100644
+--- a/src/loadkeys.analyze.l
++++ b/src/loadkeys.analyze.l
+@@ -24,6 +24,8 @@ int rvalct;
+ struct kbsentry kbs_buf;
+ static char *p, *pmax;
+ 
++extern int yylval;
++
+ extern int verbose;
+ extern int yyerror(const char *s);
+ extern void lkfatal(const char *fmt, ...);
