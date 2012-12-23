@@ -32,6 +32,7 @@ function install1 {
 	test -n "$usr"  && chown  "$usr" "$2";
 	test -n "$grp"  && chown :"$grp" "$2";
 	test -n "$perm" && chmod "$perm" "$2";
+	true;
 }
 
 case $mode in
@@ -39,6 +40,7 @@ case $mode in
 		test -n "$usr"  && chown  "$usr" "$@";
 		test -n "$grp"  && chown :"$grp" "$@";
 		test -n "$perm" && chmod "$perm" "$@";
+		true;
 		;;
 	(f)	for t in "$@"; do true; done # find last positional parameter
 		if test -d "$t"; then
