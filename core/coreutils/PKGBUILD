@@ -1,5 +1,5 @@
 pkgname=coreutils-git
-pkgver=20121220
+pkgver=20121225
 pkgrel=1
 pkgdesc="Unix Core Utilites"
 arch=('x86_64')
@@ -9,7 +9,7 @@ depends=('sbase')
 makedepends=('git' 'bmake' 'libbsd' 'libtomcrypt' 'libtommath')
 provides=('coreutils' 'sed' 'dc')
 conflicts=('coreutils' 'sed' 'dc')
-source=('install.1' 'install.sh' 'fgrep.sh' 'which.sh')
+source=('install.1' 'install.sh' 'egrep.sh' 'fgrep.sh' 'which.sh')
 
 _gitroot=https://github.com/StarchLinux/coreutils.git
 _gitname=coreutils
@@ -43,6 +43,7 @@ package() {
   mkdir -p "$pkgdir/doc/man" "$pkgdir/bin"
   cp "$srcdir/install.1" "$pkgdir/doc/man/"
   cp "$srcdir/install.sh" "$pkgdir/bin/install" && chmod +x "$pkgdir/bin/install"
+  cp "$srcdir/egrep.sh"   "$pkgdir/bin/egrep"   && chmod +x "$pkgdir/bin/egrep"
   cp "$srcdir/fgrep.sh"   "$pkgdir/bin/fgrep"   && chmod +x "$pkgdir/bin/fgrep"
   cp "$srcdir/which.sh"   "$pkgdir/bin/which"   && chmod +x "$pkgdir/bin/which"
 }
