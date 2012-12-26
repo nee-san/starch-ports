@@ -7,6 +7,7 @@ groups=()
 makedepends=('git' 'bmake')
 provides=('ncurses')
 conflicts=('ncurses')
+source=('terminfo.src')
 
 _gitroot=https://github.com/StarchLinux/ncurses.git
 _gitname=ncurses
@@ -34,4 +35,9 @@ build() {
 package() {
   cd "$srcdir/$_gitname-build"
   bmake DESTDIR="$pkgdir/" BINDIR="bin/" install
+  cd ..
+  mkdir -p "$pkgdir/usr/share/terminfo"
+  TERMINFO="$pkgdir/usr/share/terminfo" "$pkgdir/bin/tic" -I terminfo.src
 }
+
+sha1sums=('f76173d602a9ec3f12f112985744a5b9761f4654')
