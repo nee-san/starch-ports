@@ -38,4 +38,4 @@ shift $(dc -e "$OPTIND 1 - p");
 
 if test -z $have_x; then echo -n "$1" | qre >$xf; shift; fi
 
-grep $GREPFLAGS -E "$(if test -n "$xFlag"; then sed 's/^.*$/^&$/'; else cat; fi <$xf)" "$@"
+exec grep $GREPFLAGS -E "$(if test -n "$xFlag"; then sed 's/^.*$/^&$/'; else cat; fi <$xf)" "$@"
