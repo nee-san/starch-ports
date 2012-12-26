@@ -37,7 +37,7 @@ package() {
   bmake DESTDIR="$pkgdir/" BINDIR="bin/" install
   cd ..
   mkdir -p "$pkgdir/usr/share/terminfo"
-  TERMINFO="$pkgdir/usr/share/terminfo" "$pkgdir/bin/tic" -I terminfo.src
+  TERMINFO="$pkgdir/usr/share/terminfo" "$pkgdir/bin/tic" -x terminfo.src
 }
 
 sha1sums=('f76173d602a9ec3f12f112985744a5b9761f4654')
