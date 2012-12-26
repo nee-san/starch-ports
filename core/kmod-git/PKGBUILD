@@ -1,0 +1,44 @@
+pkgname=kmod-git
+pkgver=20121226
+pkgrel=1
+pkgdesc="Linux kernel module tools"
+arch=('x86_64')
+license=('GPL2')
+makedepends=('git' 'zlib')
+provides=('kmod')
+conflicts=('kmod')
+install=kmod.install
+source=('depmod-search.conf')
+
+_gitroot=git://github.com/StarchLinux/kmod.git
+_gitname=kmod
+
+build() {
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+
+  if [[ -d "$_gitname" ]]; then
+    cd "$_gitname" && git pull origin
+    msg "The local files are updated."
+  else
+    git clone "$_gitroot" "$_gitname"
+  fi
+
+  msg "GIT checkout done or server timeout"
+  msg "Starting build..."
+
+  rm -rf "$srcdir/$_gitname-build"
+  git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+  cd "$srcdir/$_gitname-build"
+
+  bmake
+}
+
+package() {
+  cd "$srcdir/$_gitname-build"
+  bmake DESTDIR="$pkgdir/" BINDIR="sbin/" install
+
+  install -Dm644 "$srcdir/depmod-search.conf" "$pkgdir/lib/depmod.d/search.conf"
+}
+
+sha1sums=('a1f6f6dbfaa93bcd32e0153b08fb579ef7746817')
