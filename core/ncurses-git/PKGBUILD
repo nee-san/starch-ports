@@ -34,7 +34,7 @@ build() {
 
 package() {
   cd "$srcdir/$_gitname-build"
-  bmake DESTDIR="$pkgdir/" BINDIR="bin/" install
+  bmake DESTDIR="$pkgdir/" BINDIR="bin/" install hdrinstall
   cd ..
   mkdir -p "$pkgdir/usr/share/terminfo"
   TERMINFO="$pkgdir/usr/share/terminfo" "$pkgdir/bin/tic" -x terminfo.src
