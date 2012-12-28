@@ -1,0 +1,39 @@
+pkgname=mg-git
+pkgver=0
+pkgrel=1
+arch=('x86_64')
+license=('custom')
+groups=()
+makedepends=('git' 'ncurses')
+provides=('mg')
+conflicts=('mg')
+
+_gitroot=https://github.com/StarchLinux/mg.git
+_gitname=mg
+
+build() {
+  cd "$srcdir"
+  msg "Connecting to GIT server...."
+
+  if [[ -d "$_gitname" ]]; then
+    cd "$_gitname" && git pull origin
+    msg "The local files are updated."
+  else
+    git clone "$_gitroot" "$_gitname"
+  fi
+
+  msg "GIT checkout done or server timeout"
+  msg "Starting build..."
+
+  rm -rf "$srcdir/$_gitname-build"
+  git clone "$srcdir/$_gitname" "$srcdir/$_gitname-build"
+  cd "$srcdir/$_gitname-build"
+
+  ./configure
+  make
+}
+
+package() {
+  cd "$srcdir/$_gitname-build"
+  make prefix="$pkgdir" INSTALL=/bin/install install
+}
